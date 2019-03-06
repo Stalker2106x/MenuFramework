@@ -1,18 +1,17 @@
+#include <fstream>
 #include "Menu.hh"
 #include "ScriptEngine.hh"
-#include "Game.hh"
-#include "Collection.hpp"
-#include "Terminal.hh"
-#include <fstream>
+#include "Point.hpp"
 
 //Menu
 
 std::shared_ptr<Menu> Menu::active = nullptr;
 std::shared_ptr<MenuFile> Menu::activeDoc = nullptr;
 std::shared_ptr<GraphicsRenderer> Menu::renderer = nullptr;
+std::shared_ptr<InputManager> Menu::inputmgr = nullptr;
 
 Menu::Menu(const std::string &id)
- : _id(id), _lastInput(0), _title(None), _clickCallback(nullptr)
+ : _id(id), _lastInput(InputManager::Keys::None), _clickCallback(nullptr)
 {
 	xml_node menu;
 
@@ -26,13 +25,17 @@ Menu::Menu(const std::string &id)
 	{
 		addItem(el);
 	}
-	if (menu.attribute("Title")) _title = Menu::convertASCIILogo(menu.attribute("Title").value());
 	if (menu.attribute("OnLoad")) _onLoadScript = menu.attribute("OnLoad").value();
 }
 
 void Menu::setRenderer(GraphicsRenderer &renderer)
 {
 	Menu::renderer = std::shared_ptr<GraphicsRenderer>(&renderer);
+}
+
+void Menu::setInputManager(InputManager &inputmgr)
+{
+	Menu::inputmgr = std::shared_ptr<InputManager>(&inputmgr);
 }
 
 void Menu::onLoad()
@@ -50,7 +53,6 @@ void Menu::setActiveDocument(std::shared_ptr<MenuFile> doc)
 	activeDoc = doc;
 	if (!activeDoc->load()) throw(std::runtime_error("Error on loading Menu XML"));
 	ScriptEngine::loadScripts(activeDoc->getData());
-	MenuDialog::load(activeDoc->getData());
 }
 
 void Menu::setClickCallback(std::function<void(std::shared_ptr<MenuItem>)> callback)
@@ -60,11 +62,12 @@ void Menu::setClickCallback(std::function<void(std::shared_ptr<MenuItem>)> callb
 
 bool Menu::update()
 {
-	_lastInput = getch();
-	if(_lastInput == KEY_UP) updateCursor(false);
-	else if(_lastInput == KEY_DOWN) updateCursor(true);
-	else if(_lastInput == KEY_ENTER || _lastInput == '\n' || _lastInput == '\r') (*_selection)->select();
-	else if (_lastInput == KEY_F(11)) ScriptEngine::console(*this);
+	InputManager::Keys input = inputmgr->getInput();
+
+	if(input == InputManager::Keys::KEY_UP) updateCursor(false);
+	else if(input == InputManager::Keys::KEY_DOWN) updateCursor(true);
+	else if(input == InputManager::Keys::KEY_ENTER) (*_selection)->select();
+	else if (input == InputManager::Keys::KEY_F11) ScriptEngine::console(*this);
 	else return (false);
 	return (true);
 }
@@ -115,11 +118,6 @@ void Menu::render()
 {
 	renderer->clearScreen();
 	renderAlerts();
-	if (_title != -1)
-	{
-		printASCIILogo(_title);
-		(*renderer) << "\n";
-	}
 	for (size_t i = 0; i < _items.size(); i++)
 	{
 		_items[i]->render();
@@ -165,81 +163,7 @@ void Menu::alert(std::string str)
 		if (!menu.load()) throw(std::runtime_error("Error on loading Alert XML"));
 		Menu::active->addAlert(MenuItem::create(menu.getData().first_child()));
 	}
-	else Terminal::windows.at("main").print(str+"\n");
-}
-
-Menu::ASCIILogo Menu::convertASCIILogo(std::string art)
-{
-	if (art == "Game") return (ASCIILogo::Game);
-	else if (art == "Options") return (Options);
-	else if (art == "Garage") return (Garage);
-	else if (art == "Stats") return (Stats);
-	else if (art == "Car") return (Car);
-	else return (None);
-}
-
-void Menu::printASCIILogo(ASCIILogo art)
-{
-	switch (art)
-	{
-	case ASCIILogo::Game:
-		(*renderer) << setColor(GraphicsRenderer::Color::Red)
-				 				<< " ________                  ________       _____                    \n"
-				 				<< " ___  __ \\_____ ______________  __ \\_________(_)__   ______________\n"
-				 				<< " __  /_/ /  __ `/  ___/  _ \\_  / / /_  ___/_  /__ | / /  _ \\_  ___/\n"
-				 				<< " _  _, _// /_/ // /__ /  __/  /_/ /_  /   _  / __ |/ //  __/  /    \n"
-				 				<< " /_/ |_| \\__,_/ \\___/ \\___//_____/ /_/    /_/  _____/ \\___//_/     \n"
-				 				<< resetAttrs;
-		break;
-	case Options:
-		(*renderer) << setColor(GraphicsRenderer::Color::Red)
-								<< "_______          _____ _____                        \n"
-								<< "__  __ \\________ __  /____(_)______ _______ ________\n"
-								<< "_  / / /___  __ \\_  __/__  / _  __ \\__  __ \\__  ___/\n"
-								<< "/ /_/ / __  /_/ // /_  _  /  / /_/ /_  / / /_(__  ) \n"
-								<< "\\____/  _  .___/ \\__/  /_/   \\____/ /_/ /_/ /____/  \n"
-								<< "        /_/                                         \n"
-								<< resetAttrs;
-		break;
-	case Garage:
-		(*renderer) << setColor(GraphicsRenderer::Color::Red)
-								<< "_________                                       \n"
-								<< "__  ____/______ _______________ ________ ______ \n"
-								<< "_  / __  _  __ `/__  ___/_  __ `/__  __ `/_  _ \\\n"
-								<< "/ /_/ /  / /_/ / _  /    / /_/ / _  /_/ / /  __/\n"
-								<< "\\____/   \\__,_/  /_/     \\__,_/  _\\__, /  \\___/ \n"
-								<< "                                 /____/         \n"
-								<< resetAttrs;
-		break;
-	case Stats:
-		(*renderer) << setColor(GraphicsRenderer::Color::Red)
-								<< "_____________         _____         \n"
-								<< "__  ___/__  /_______ ___  /_________\n"
-								<< "_____ \\ _  __/_  __ `/_  __/__  ___/\n"
-								<< "____/ / / /_  / /_/ / / /_  _(__  ) \n"
-								<< "/____/  \\__/  \\__,_/  \\__/  /____/  \n"
-								<< resetAttrs;
-		break;
-	case Car:
-		(*renderer) << setColor(GraphicsRenderer::Color::Red)
-								<< "		                      ___..............._\n"
-								<< "             __.. ' _'.\"\"\"\"\"\"\\\\\"\"\"\"\"\"\"\"- .`-._\n"
-								<< " ______.-'         (_) |      \\\\           ` \\\\`-. _\n"
-								<< "/_       --------------'-------\\\\---....______\\\\__`.`  -..___\n"
-								<< "| T      _.----._           Xxx|x...           |          _.._`--. _\n"
-								<< "| |    .' ..--.. `.         XXX|XXXXXXXXXxx==  |       .'.---..`.     -._\n"
-								<< "\\_j   /  /  __  \\  \\        XXX|XXXXXXXXXXX==  |      / /  __  \\ \\        `-.\n"
-								<< " _|  |  |  /  \\  |  |       XXX|\"\"'            |     / |  /  \\  | |          |\n"
-								<< "|__\\_j  |  \\__/  |  L__________|_______________|_____j |  \\__/  | L__________J\n"
-								<< "     `'\\ \\      / ./__________________________________\\ \\      / /___________\\\n"
-								<< "        `.`----'.'                                     `.`----'.'\n"
-								<< "          `\"\"\"\"'                                         `\"\"\"\"'\n"
-								<< resetAttrs;
-		break;
-	case None:
-	default:
-		break;
-	}
+	else renderer->print(str+"\n");
 }
 
 void Menu::addAlert(std::shared_ptr<MenuItem> menuItem)
@@ -270,7 +194,7 @@ void Menu::popUp(std::string id, std::string source, const DataSource dataMode)
 	{
 		active->render();
 		active->update();
-		if(active->_lastInput == KEY_ENTER || active->_lastInput == '\n' || active->_lastInput == '\r') break;
+		if(active->_lastInput == InputManager::Keys::KEY_ENTER) break;
 	};
 	if (active->_clickCallback != nullptr)
 	{
@@ -301,35 +225,4 @@ void Menu::addItem(const xml_node &el, int idx)
 	}
 	resetCursor();
 	if (_selection != _items.end()) (*_selection)->toggleHover();
-}
-
-//MenuDialog
-
-std::map<std::string, MenuDialog> MenuDialog::dialogs = std::map<std::string, MenuDialog>();
-
-MenuDialog::MenuDialog(xml_node &data)
- : _data(data.first_child().value())
-{
-
-}
-
-void MenuDialog::load(const xml_document &doc)
-{
-	for (pugi::xml_node el = doc.first_child(); el; el = el.next_sibling())
-	{
-		if (strcmp(el.name(), "Dialog") == 0)
-		{
-			dialogs.emplace(el.attribute("Id").value(), MenuDialog(el));
-		}
-	}
-}
-
-void MenuDialog::open()
-{
-	//_win = Terminal::get().addChildWindow(Point(), Point(50, 50));
-}
-
-void MenuDialog::render()
-{
-
 }

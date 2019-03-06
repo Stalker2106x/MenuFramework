@@ -1,13 +1,6 @@
 #include "Localization.hh"
 #include "ScriptEngine.hh"
-#include "Menu/Menu.hh"
-#include "Game.hh"
-#include "Spoiler.hh"
-#include "Engine.hh"
-#include "Tires.hh"
-#include "Profile.hh"
-#include "Race.hh"
-#include "cppMenus.hh"
+#include "Menu.hh"
 
 std::map<std::string, std::string> ScriptEngine::scripts = std::map<std::string, std::string>();
 std::map<std::string, std::string> ScriptEngine::environment = std::map<std::string, std::string>();
@@ -23,7 +16,6 @@ void ScriptEngine::reset()
 {
   engine.collect_garbage();
   scriptEnv = sol::environment(ScriptEngine::engine, sol::create);
-  exposeCollections();
   exposeCpp();
 }
 
@@ -45,11 +37,11 @@ void ScriptEngine::run(const std::string &script)
 void ScriptEngine::exposeCpp()
 {
   //General
-  scriptEnv.set_function("print", [=] (std::string x) { Terminal::windows.at("main") << x; });
+  scriptEnv.set_function("print", [=] (std::string x) { (*Menu::renderer) << x; });
   scriptEnv.set_function("tostring", [=] (int x) { return (std::to_string(x)); });
   scriptEnv.set_function("toint", [=] (std::string str) { return (atoi(str.c_str())); });
-  scriptEnv.set_function("clearScreen", [] () { Terminal::windows.at("main").clearScreen(); });
-  scriptEnv.set_function("pause", [] () { getch(); });
+  scriptEnv.set_function("clearScreen", [] () { (*Menu::renderer).clearScreen(); });
+  //scriptEnv.set_function("pause", [] () { getch(); });
   scriptEnv.set_function("exit", [] () { exit(0); });
   scriptEnv.set_function("alert", [=] (std::string msg) { Menu::alert(msg); });
   scriptEnv.set_function("goTo", [=] (std::string id) { Menu::goTo(id); });
@@ -80,48 +72,6 @@ void ScriptEngine::exposeCpp()
     std::shared_ptr<MenuSelect> sel = std::dynamic_pointer_cast<MenuSelect>(Menu::active->getItem(id));
     sel->setData(value);
   });
-  //Custom
-  scriptEnv.set_function("printASCIILogo", [] (std::string art) { Menu::printASCIILogo(Menu::convertASCIILogo(art)); });
-  scriptEnv.set_function("getVersion", [] () { return (GAME_VERSION); });
-  //Profile bindings
-  scriptEnv.set_function("loadProfile", [=] (std::string save) { Profile::load(save); });
-  scriptEnv.set_function("createProfile", [=] (std::string name, std::string locale) { Profile::create(name, locale); });
-  scriptEnv.set_function("reloadLocale", [] () { Localization::load(Profile::active->localization); });
-  //Cpp Menus
-  scriptEnv.set_function("loadGameMenu", &menuLoadGame);
-  scriptEnv.set_function("startRace", [] () {
-    Race race(std::make_shared<Car>(Profile::active->garage.get(atoi(ScriptEngine::environment["Box"].c_str()))),
-              Track::collection[(atoi(ScriptEngine::environment["Track"].c_str()))]);
-
-    if (race.preparations()) race.start();
-  });
-  scriptEnv.set_function("selectCarMenu", &menuSelectCar);
-  scriptEnv.set_function("selectTrackMenu", &menuSelectTrack);
-  scriptEnv.set_function("buyBoxMenu", &menuBuyBox);
-}
-
-void ScriptEngine::exposeCollections()
-{
-  Profile::expose(scriptEnv);
-  Stats::expose(scriptEnv);
-  Car::expose(scriptEnv);
-  Garage::expose(scriptEnv);
-  Engine::expose(scriptEnv);
-  Spoiler::expose(scriptEnv);
-  Tires::expose(scriptEnv);
-  Collection<Car>::expose(scriptEnv);
-  Collection<Engine>::expose(scriptEnv);
-  Collection<Spoiler>::expose(scriptEnv);
-  Collection<Tires>::expose(scriptEnv);
-  scriptEnv["Cars"] = std::ref(Car::collection);
-  scriptEnv["Engines"] = std::ref(Engine::collection);
-  scriptEnv["Spoilers"] = std::ref(Spoiler::collection);
-  scriptEnv["Tires"] = std::ref(Tires::collection);
-  if (Profile::active != nullptr)
-  {
-    scriptEnv["Garage"] = std::ref(Profile::active->garage);
-    scriptEnv["Profile"] = std::ref(*Profile::active);
-  }
 }
 
 void ScriptEngine::loadScripts(const xml_document &doc)
@@ -138,24 +88,21 @@ void ScriptEngine::loadScripts(const xml_document &doc)
 
 void ScriptEngine::console(Menu &currentMenu)
 {
-  Terminal &term = Terminal::windows.at("main");
   int input;
   std::string command;
 
-  term.setCursor(1);
   currentMenu.renderConsole(command); //Renders console
-  while ((input = getch()) != KEY_F(11))
+  while ((input = Menu::inputmgr->getInput()) != InputManager::Keys::KEY_F11)
   {
-    term.clearScreen();
-    if (input == KEY_ENTER || input == '\r' || input == '\n')
+    Menu::renderer->clearScreen();
+    if (input == InputManager::Keys::KEY_ENTER)
     {
       run(command);
       command.clear();
     }
-    else if (command.length() > 0 && (input == KEY_BACKSPACE || input == '\b')) command.erase(--command.end());
+    else if (command.length() > 0 && (input == InputManager::Keys::KEY_BACKSPACE)) command.erase(--command.end());
     else command += input;
     currentMenu.renderConsole(command);
   }
-  term.setCursor(0);
-  term.clearScreen();
+  Menu::renderer->clearScreen();
 }

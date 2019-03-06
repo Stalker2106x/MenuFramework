@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include "Point.hpp"
 #include "DataFile.hh"
 
 #define TARGET_SEPARATOR  ":"

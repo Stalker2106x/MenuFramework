@@ -7,6 +7,8 @@
 #include <map>
 #include <memory>
 #include <functional>
+#include "GraphicsRenderer.hh"
+#include "InputManager.hpp"
 #include "DataFile.hh"
 #include "MenuItem.hh"
 
@@ -17,18 +19,9 @@ class Menu
 {
 public:
   //Generic
-  enum ASCIILogo {
-    None = -1,
-    Game,
-    Options,
-    Garage,
-    Stats,
-    Car
-  };
   static void setRenderer(GraphicsRenderer &renderer);
+  static void setInputManager(InputManager &inputmgr);
 
-  static ASCIILogo convertASCIILogo(std::string art);
-  static void printASCIILogo(ASCIILogo art);
   static void alert(std::string str);
 
   static void setActiveDocument(const std::string &source, const DataSource sourceMode);
@@ -61,38 +54,18 @@ public:
   void renderConsole(std::string command);
 
   static std::shared_ptr<GraphicsRenderer> renderer;
+  static std::shared_ptr<InputManager> inputmgr;
 private:
   std::shared_ptr<MenuItem> getHoveredItem();
 
 
   std::string _id;
-  int _lastInput;
-  ASCIILogo _title; //title art
+  InputManager::Keys _lastInput;
   std::vector<std::shared_ptr<MenuItem>>::iterator _selection;
   std::shared_ptr<std::function<void(std::shared_ptr<MenuItem>)>> _clickCallback;
   std::string _onLoadScript;
   std::deque<std::shared_ptr<MenuItem>> _alerts;
   std::vector<std::shared_ptr<MenuItem>> _items;
-};
-
-/*!
- * @brief Acts as a sub window
- */
-class MenuDialog
-{
-public:
-  MenuDialog(xml_node &data);
-
-  static void load(const xml_document &doc);
-
-  static std::map<std::string, MenuDialog> dialogs;
-
-  void open();
-  void render();
-
-private:
-  std::string _data;
-  WINDOW *_win;
 };
 
 #endif /* !MENU_HH_ */

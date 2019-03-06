@@ -4,7 +4,6 @@
 #include <map>
 #include <sol.hpp>
 #include "DataFile.hh"
-#include "Terminal.hh"
 
 class Menu;
 
@@ -16,7 +15,6 @@ struct ScriptEngine
   static void runScript(const std::string &scriptId);
   static void run(const std::string &script);
   static void exposeCpp();
-  static void exposeCollections();
 
   static void loadScripts(const xml_document &doc);
 
