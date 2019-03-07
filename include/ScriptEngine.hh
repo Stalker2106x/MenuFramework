@@ -2,9 +2,11 @@
 #define SCRIPTENGINE_HH_
 
 #include <map>
-#include <sol.hpp>
 #include "DataFile.hh"
-
+#include <sol/forward.hpp>
+namespace sol {
+  class state;
+}
 class Menu;
 
 struct ScriptEngine

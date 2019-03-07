@@ -15,8 +15,8 @@ public:
     F11
   };
 
-  InputManager();
-  virtual ~InputManager();
+  InputManager() {};
+  virtual ~InputManager() {};
 
   virtual Keys getInput() = 0;
 

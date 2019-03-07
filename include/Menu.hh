@@ -19,8 +19,8 @@ class Menu
 {
 public:
   //Generic
-  static void setRenderer(GraphicsRenderer &renderer);
-  static void setInputManager(InputManager &inputmgr);
+  static void setRenderer(std::shared_ptr<GraphicsRenderer> renderer);
+  static void setInputManager(std::shared_ptr<InputManager> inputmgr);
 
   static void alert(std::string str);
 

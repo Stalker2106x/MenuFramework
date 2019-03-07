@@ -1,3 +1,4 @@
+#include <sol.hpp>
 #include "Localization.hh"
 #include "ScriptEngine.hh"
 #include "Menu.hh"

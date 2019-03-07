@@ -6,7 +6,7 @@
 
 SRCDIR = src
 
-BINDIR = bin
+BINDIR = lib
 
 LIBDIR = thirdparty
 
@@ -14,20 +14,22 @@ LIBDIR = thirdparty
 
 CXX = g++
 
+ARCHIVE = ar rcs
+
 RM = rm -rf
 
-CXXFLAGS	= -std=c++14 -ggdb -W -Wall -Wpedantic -Iinclude
+CXXFLAGS	= -std=c++17 -ggdb -W -Wall -Wpedantic -Iinclude -fPIC
 CXXFLAGS += -I$(LIBDIR) -I$(LIBDIR)/json/include/ -I$(LIBDIR)/pugixml/src/ -I$(LIBDIR)/sol2/ -I$(LIBDIR)/lua/
 
-LDFLAGS		= -L$(LIBDIR)/lua/ -llua -shared
+LDFLAGS		= $(LIBDIR)/lua/liblua.a
 # -static-libgcc
 
 ifeq ($(OS),Windows_NT)
 	MAKE = mingw32-make
-	NAME = $(BINDIR)/MenuFramework.dll
+	NAME = $(BINDIR)/MenuFramework.a
 else
 	MAKE = make
-	NAME = $(BINDIR)/MenuFramework.so
+	NAME = $(BINDIR)/MenuFramework.a
 endif
 
 SRCS = 	$(SRCDIR)/Localization.cpp					\
@@ -52,7 +54,7 @@ else
 endif
 
 library:	$(info ****************** Run "make deps" before compiling library *****************) $(OBJS)
-	$(CXX) $(OBJS) $(RES) -o $(NAME) $(LDFLAGS)
+	$(ARCHIVE) $(NAME) $(OBJS) $(LDFLAGS)
 
 clean:
 	$(RM) $(OBJS)

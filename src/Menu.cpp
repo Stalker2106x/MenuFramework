@@ -28,14 +28,14 @@ Menu::Menu(const std::string &id)
 	if (menu.attribute("OnLoad")) _onLoadScript = menu.attribute("OnLoad").value();
 }
 
-void Menu::setRenderer(GraphicsRenderer &renderer)
+void Menu::setRenderer(std::shared_ptr<GraphicsRenderer> renderer)
 {
-	Menu::renderer = std::shared_ptr<GraphicsRenderer>(&renderer);
+	Menu::renderer = renderer;
 }
 
-void Menu::setInputManager(InputManager &inputmgr)
+void Menu::setInputManager(std::shared_ptr<InputManager> inputmgr)
 {
-	Menu::inputmgr = std::shared_ptr<InputManager>(&inputmgr);
+	Menu::inputmgr = inputmgr;
 }
 
 void Menu::onLoad()
