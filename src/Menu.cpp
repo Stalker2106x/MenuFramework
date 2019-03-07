@@ -9,6 +9,7 @@ std::shared_ptr<Menu> Menu::active = nullptr;
 std::shared_ptr<MenuFile> Menu::activeDoc = nullptr;
 std::shared_ptr<GraphicsRenderer> Menu::renderer = nullptr;
 std::shared_ptr<InputManager> Menu::inputmgr = nullptr;
+bool Menu::quit = false;
 
 Menu::Menu(const std::string &id)
  : _id(id), _lastInput(InputManager::Keys::None), _clickCallback(nullptr)
@@ -28,6 +29,8 @@ Menu::Menu(const std::string &id)
 	if (menu.attribute("OnLoad")) _onLoadScript = menu.attribute("OnLoad").value();
 }
 
+//Init routines
+
 void Menu::setRenderer(std::shared_ptr<GraphicsRenderer> renderer)
 {
 	Menu::renderer = renderer;
@@ -36,6 +39,14 @@ void Menu::setRenderer(std::shared_ptr<GraphicsRenderer> renderer)
 void Menu::setInputManager(std::shared_ptr<InputManager> inputmgr)
 {
 	Menu::inputmgr = inputmgr;
+}
+
+void Menu::unload()
+{
+	Menu::active = nullptr;
+	Menu::activeDoc = nullptr;
+	Menu::renderer = nullptr;
+	Menu::inputmgr = nullptr;
 }
 
 void Menu::onLoad()
@@ -127,7 +138,6 @@ void Menu::render()
 
 bool Menu::run()
 {
-	bool quit = false;
 	while (!quit)
 	{
 		active->render();

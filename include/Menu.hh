@@ -21,6 +21,7 @@ public:
   //Generic
   static void setRenderer(std::shared_ptr<GraphicsRenderer> renderer);
   static void setInputManager(std::shared_ptr<InputManager> inputmgr);
+  static void unload();
 
   static void alert(std::string str);
 
@@ -53,6 +54,7 @@ public:
   void render();
   void renderConsole(std::string command);
 
+  static bool quit;
   static std::shared_ptr<GraphicsRenderer> renderer;
   static std::shared_ptr<InputManager> inputmgr;
 private:

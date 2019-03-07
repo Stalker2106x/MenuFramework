@@ -43,7 +43,7 @@ void ScriptEngine::exposeCpp()
   scriptEnv.set_function("toint", [=] (std::string str) { return (atoi(str.c_str())); });
   scriptEnv.set_function("clearScreen", [] () { (*Menu::renderer).clearScreen(); });
   //scriptEnv.set_function("pause", [] () { getch(); });
-  scriptEnv.set_function("exit", [] () { exit(0); });
+  scriptEnv.set_function("exit", [] () { Menu::quit = true; });
   scriptEnv.set_function("alert", [=] (std::string msg) { Menu::alert(msg); });
   scriptEnv.set_function("goTo", [=] (std::string id) { Menu::goTo(id); });
   scriptEnv.set_function("goToPath", [=] (std::string id, std::string path) { Menu::goTo(id, path); });

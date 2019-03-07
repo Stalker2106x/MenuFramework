@@ -5,6 +5,11 @@
 #ifdef _MSC_VER
 #include "dirent/dirent.h"
 #endif
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
+#include <pugixml.hpp>
+using xml_document = pugi::xml_document;
+using xml_node = pugi::xml_node;
 
 //JSON
 

@@ -34,6 +34,20 @@ should auto-generate the library based on your platform.
 Tested on *C++14* compliant *MinGW, GCC, and MSBuild*.
 Enjoy! Library binary will be built inside ./bin folder!
 
+## Getting started
+
+The menu framework is based on components: GraphicsRenderer, and InputManager. They allow to use any rendering system to print Menus, and any user input mechanism to interact with user interface.
+You must provide implementation for both of them through the following methods:
+
+    static void Menu::setRenderer(std::shared_ptr<GraphicsRenderer> renderer);
+    static void Menu::setInputManager(std::shared_ptr<InputManager> inputmgr);
+
+To do so, just create your own classes, inherit from GraphicsRenderer and InputManager classes, and implement pure virtual functions.
+
+Do not forget to unload menu via
+
+    static void Menu::unload();
+
 ## Adding menus
 
 You may want to create your own menus. Luckily, the next chapter describes all the elements available to create one.
