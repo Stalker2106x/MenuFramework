@@ -92,15 +92,15 @@ void ScriptEngine::console(Menu &currentMenu)
   std::string command;
 
   currentMenu.renderConsole(command); //Renders console
-  while ((input = Menu::inputmgr->getInput()) != InputManager::Keys::KEY_F11)
+  while ((input = Menu::inputmgr->getInput()) != InputManager::Keys::F11)
   {
     Menu::renderer->clearScreen();
-    if (input == InputManager::Keys::KEY_ENTER)
+    if (input == InputManager::Keys::Enter)
     {
       run(command);
       command.clear();
     }
-    else if (command.length() > 0 && (input == InputManager::Keys::KEY_BACKSPACE)) command.erase(--command.end());
+    else if (command.length() > 0 && (input == InputManager::Keys::Backspace)) command.erase(--command.end());
     else command += input;
     currentMenu.renderConsole(command);
   }

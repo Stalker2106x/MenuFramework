@@ -143,9 +143,9 @@ void MenuInput::select()
   Menu::active->render(); //Render once
   //Menu::renderer->setCursor(2); //Block cursor
   //Menu::renderer->setCursorPos(_dataPos); //set cursor at end of input
-  while ((input = Menu::inputmgr->getInput()) != InputManager::Keys::KEY_ENTER)
+  while ((input = Menu::inputmgr->getInput()) != InputManager::Keys::Enter)
   {
-    if (_data.length() > 0 && (input == InputManager::Keys::KEY_BACKSPACE)) _data.erase(--_data.end());
+    if (_data.length() > 0 && (input == InputManager::Keys::Backspace)) _data.erase(--_data.end());
     else _data += input;
     Menu::renderer->clearScreen();
     Menu::active->render(); //Request render to update input
@@ -194,10 +194,10 @@ void MenuSelect::select()
   int input;
 
   Menu::active->render(); //Render once
-  while ((input = Menu::inputmgr->getInput()) != InputManager::Keys::KEY_ENTER)
+  while ((input = Menu::inputmgr->getInput()) != InputManager::Keys::Enter)
   {
-    if (input == InputManager::Keys::KEY_LEFT) --_cursor;
-    else if (input == InputManager::Keys::KEY_RIGHT) ++_cursor;
+    if (input == InputManager::Keys::Left) --_cursor;
+    else if (input == InputManager::Keys::Right) ++_cursor;
     if (_cursor < 0) _cursor = _values.size()-1;
     if (static_cast<size_t>(_cursor) >= _values.size()) _cursor = 0;
     Menu::renderer->clearScreen();

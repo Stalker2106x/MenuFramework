@@ -64,10 +64,10 @@ bool Menu::update()
 {
 	InputManager::Keys input = inputmgr->getInput();
 
-	if(input == InputManager::Keys::KEY_UP) updateCursor(false);
-	else if(input == InputManager::Keys::KEY_DOWN) updateCursor(true);
-	else if(input == InputManager::Keys::KEY_ENTER) (*_selection)->select();
-	else if (input == InputManager::Keys::KEY_F11) ScriptEngine::console(*this);
+	if(input == InputManager::Keys::Up) updateCursor(false);
+	else if(input == InputManager::Keys::Down) updateCursor(true);
+	else if(input == InputManager::Keys::Enter) (*_selection)->select();
+	else if (input == InputManager::Keys::F11) ScriptEngine::console(*this);
 	else return (false);
 	return (true);
 }
@@ -194,7 +194,7 @@ void Menu::popUp(std::string id, std::string source, const DataSource dataMode)
 	{
 		active->render();
 		active->update();
-		if(active->_lastInput == InputManager::Keys::KEY_ENTER) break;
+		if(active->_lastInput == InputManager::Keys::Enter) break;
 	};
 	if (active->_clickCallback != nullptr)
 	{

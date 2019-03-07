@@ -6,13 +6,13 @@ class InputManager
 public:
   enum Keys {
     None = -1,
-    KEY_UP,
-    KEY_LEFT,
-    KEY_RIGHT,
-    KEY_DOWN,
-    KEY_ENTER,
-    KEY_BACKSPACE,
-    KEY_F11
+    Up,
+    Left,
+    Right,
+    Down,
+    Enter,
+    Backspace,
+    F11
   };
 
   InputManager();
