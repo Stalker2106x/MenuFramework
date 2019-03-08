@@ -1,6 +1,8 @@
 #ifndef INPUTMANAGER_HPP_
 #define INPUTMANAGER_HPP_
 
+#include "export.h"
+
 class MF_API InputManager
 {
 public:

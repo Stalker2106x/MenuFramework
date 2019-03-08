@@ -7,6 +7,7 @@
 #include <map>
 #include <memory>
 #include <functional>
+#include "export.h"
 #include "GraphicsRenderer.hh"
 #include "InputManager.hpp"
 #include "DataFile.hh"

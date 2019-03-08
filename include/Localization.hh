@@ -2,6 +2,7 @@
 #define LOCALIZATION_HH_
 
 #include <map>
+#include "export.h"
 #include "DataFile.hh"
 
 struct MF_API Localization

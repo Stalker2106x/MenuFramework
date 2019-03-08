@@ -2,6 +2,7 @@
 #define SCRIPTENGINE_HH_
 
 #include <map>
+#include "export.h"
 #include "DataFile.hh"
 #include <sol/forward.hpp>
 namespace sol {

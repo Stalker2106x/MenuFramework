@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <map>
+#include "export.h"
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 #include <pugixml.hpp>

@@ -1,6 +1,8 @@
 #ifndef POINT_HPP_
 #define POINT_HPP_
 
+#include "export.h"
+
 struct MF_API Point {
   int x;
   int y;

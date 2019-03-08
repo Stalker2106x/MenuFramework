@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include "export.h"
 #include "Point.hpp"
 #include "DataFile.hh"
 

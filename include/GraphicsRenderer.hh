@@ -3,6 +3,7 @@
 
 #include <string>
 #include <functional>
+#include "export.h"
 #include "Point.hpp"
 
 class MF_API GraphicsRenderer
