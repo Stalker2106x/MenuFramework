@@ -15,7 +15,7 @@
 /*!
  * @brief Base/Generic class for Menu
  */
-class Menu
+class MF_API Menu
 {
 public:
   //Generic

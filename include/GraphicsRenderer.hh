@@ -5,7 +5,7 @@
 #include <functional>
 #include "Point.hpp"
 
-class GraphicsRenderer
+class MF_API GraphicsRenderer
 {
 public:
   enum Color {

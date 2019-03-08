@@ -11,7 +11,7 @@
 /*!
  * @brief Holds menu entry data
  */
-class MenuItem
+class MF_API MenuItem
 {
 public:
   enum Type {

@@ -17,7 +17,7 @@ enum DataSource {
 /*!
  * @brief JSON File I/O serialization class
  */
-class DataFile
+class MF_API DataFile
 {
 public:
   DataFile(const std::string &source, const DataSource sourceMode = Filesystem);
@@ -44,7 +44,7 @@ private:
 /*!
  * @brief XML File I/O serialization class
  */
-class MenuFile
+class MF_API MenuFile
 {
 public:
   MenuFile(const std::string &source, const DataSource sourceMode = Filesystem);

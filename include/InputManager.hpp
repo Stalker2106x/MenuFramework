@@ -1,7 +1,7 @@
 #ifndef INPUTMANAGER_HPP_
 #define INPUTMANAGER_HPP_
 
-class InputManager
+class MF_API InputManager
 {
 public:
   enum Keys {

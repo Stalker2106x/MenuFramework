@@ -4,7 +4,7 @@
 #include <map>
 #include "DataFile.hh"
 
-struct Localization
+struct MF_API Localization
 {
   static void clear();
   static std::string substitute(std::string data);

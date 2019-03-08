@@ -9,7 +9,7 @@ namespace sol {
 }
 class Menu;
 
-struct ScriptEngine
+struct MF_API ScriptEngine
 {
   static void init();
   static void reset();
