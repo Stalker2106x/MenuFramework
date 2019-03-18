@@ -2,8 +2,10 @@ cmake_minimum_required(VERSION 3.9)
 
 project(MenuFramework VERSION 1.0.1 DESCRIPTION "Menu Framework")
 
-find_library(LIBLUA NAMES liblua_static.lib lua.a
-             HINTS thirdparty/luac/build/Debug)
+find_library(LIBLUA NAMES liblua_static.lib libliblua_static.a
+             HINTS thirdparty/luac/build
+             thirdparty/luac/build/Debug
+             thirdparty/luac/build/Release)
 
 add_library(MenuFramework SHARED
     src/Localization.cpp
