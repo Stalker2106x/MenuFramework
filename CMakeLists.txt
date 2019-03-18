@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.9)
 
 project(MenuFramework VERSION 1.0.1 DESCRIPTION "Menu Framework")
 
-find_library(LIBLUA NAMES liblua.lib liblua.a HINTS thirdparty/lua)
+find_library(LIBLUA NAMES liblua_static.lib lua.a
+             HINTS thirdparty/luac/build/Debug)
 
 add_library(MenuFramework SHARED
     src/Localization.cpp
@@ -21,6 +22,7 @@ include_directories(thirdparty)
 include_directories(thirdparty/json/include)
 include_directories(thirdparty/pugixml/src)
 include_directories(thirdparty/sol2)
-include_directories(thirdparty/lua)
+include_directories(thirdparty/luac/src)
+include_directories(thirdparty/luac/build) #added for luaconf.h
 
 target_link_libraries(MenuFramework ${LIBLUA})

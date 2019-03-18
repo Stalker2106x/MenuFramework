@@ -24,15 +24,21 @@ you can do so with the following command-lines:
 
     git submodule init
     git submodule update
-    make deps
 
-Then, running standard
+Don't forget tu build lua! To do so, go deep down "<REPOSITORY>/thirdparty/luac/" and run the following commands:
 
-    make
+    mkdir build
+    cd build
+    cmake ..
 
-should auto-generate the library based on your platform.
-Tested on *C++14* compliant *MinGW, GCC, and MSBuild*.
-Enjoy! Library binary will be built inside ./bin folder!
+When done, build lua with the generated tools, and go to next step.
+The project itself is based on CMake, which means you have to generate the build tools for it.
+Though, generating requires lua to be correctly compiled, so, make sure you have it correctly built before running cmake
+
+    cmake .
+
+Then, it should generate the correct build tools based on what your cmake is configured for.
+The library has been tested on *C++14* compliant *MinGW, GCC, and MSBuild*.
 
 ## Getting started
 
