@@ -9,9 +9,10 @@ before_script:
   - mkdir build
   - cd build
   - cmake ..
-  - cd ../../../
+  - make
+
+script:
   - mkdir build
   - cd build
   - cmake ..
-
-script: make && make test
+  - make
