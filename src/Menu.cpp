@@ -19,6 +19,7 @@ Menu::Menu(const std::string &id)
 {
 	xml_node menu;
 
+	_selection = _items.begin(); //Initialize selection
 	ScriptEngine::reset(); //Clears lua state
 	for (pugi::xml_node el = activeDoc->getData().first_child(); el; el = el.next_sibling())
 	{
@@ -98,8 +99,10 @@ int Menu::getCursor()
 }
 void Menu::resetCursor()
 {
+	if (_selection != _items.end()) (*_selection)->toggleHover(); //Unselect previous selection if exists
 	_selection = _items.begin();
 	while (_selection != _items.end() && !((*_selection)->isSelectable())) _selection++;
+	if (_selection != _items.end()) (*_selection)->toggleHover();
 }
 
 void Menu::updateCursor(bool add)
@@ -227,7 +230,6 @@ std::shared_ptr<MenuItem> Menu::getItem(const std::string &id)
 
 void Menu::addItem(const xml_node &el, int idx)
 {
-    //if (_selection != _items.end()) (*_selection)->toggleHover(); //Unselect previous selection if exists
 	try {
 		std::shared_ptr<MenuItem> obj = MenuItem::create(el);
 		auto it = (idx == -1 ? _items.end() : _items.begin() + idx);
@@ -236,6 +238,5 @@ void Menu::addItem(const xml_node &el, int idx)
 	} catch(std::exception &e) {
 		Menu::alert(e.what());
 	}
-	resetCursor();
-	//if (_selection != _items.end()) (*_selection)->toggleHover();
+	resetCursor(); //Iterator invalidated, reset selection
 }
