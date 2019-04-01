@@ -1,13 +1,16 @@
 cmake_minimum_required(VERSION 3.9)
 
-project(MenuFramework VERSION 1.0.1 DESCRIPTION "Menu Framework")
+project(MenuFramework
+        VERSION 1.0.1
+        LANGUAGES CXX
+        DESCRIPTION "Menu Framework")
 
 find_library(LIBLUA NAMES liblua_static.lib libliblua_static.a
              HINTS thirdparty/luac/build
              thirdparty/luac/build/Debug
              thirdparty/luac/build/Release)
 
-add_library(MenuFramework SHARED
+add_library(MenuFramework STATIC
     src/Localization.cpp
     src/GraphicsRenderer.cpp
     src/Menu.cpp
@@ -20,6 +23,7 @@ add_library(MenuFramework SHARED
 set_target_properties(MenuFramework PROPERTIES PUBLIC_HEADER include/MenuFramework.hpp)
 
 include_directories(include)
+include_directories(renderers)
 include_directories(thirdparty)
 include_directories(thirdparty/json/include)
 include_directories(thirdparty/pugixml/src)
