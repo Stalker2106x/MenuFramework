@@ -2,13 +2,16 @@
 #include "Menu.hh"
 #include "ScriptEngine.hh"
 #include "Point.hpp"
+//Native renderer
+#include "term-native/NativeInput.hpp"
+#include "term-native/NativeRenderer.hpp"
 
 //Menu
 
 std::shared_ptr<Menu> Menu::active = nullptr;
 std::shared_ptr<MenuFile> Menu::activeDoc = nullptr;
-std::shared_ptr<GraphicsRenderer> Menu::renderer = nullptr;
-std::shared_ptr<InputManager> Menu::inputmgr = nullptr;
+std::shared_ptr<GraphicsRenderer> Menu::renderer = std::make_shared<NativeRenderer>();
+std::shared_ptr<InputManager> Menu::inputmgr = std::make_shared<NativeInput>();
 bool Menu::quit = false;
 
 Menu::Menu(const std::string &id)
@@ -224,7 +227,7 @@ std::shared_ptr<MenuItem> Menu::getItem(const std::string &id)
 
 void Menu::addItem(const xml_node &el, int idx)
 {
-	if (_selection != _items.end()) (*_selection)->toggleHover(); //Unselect previous selection
+    //if (_selection != _items.end()) (*_selection)->toggleHover(); //Unselect previous selection if exists
 	try {
 		std::shared_ptr<MenuItem> obj = MenuItem::create(el);
 		auto it = (idx == -1 ? _items.end() : _items.begin() + idx);
@@ -234,5 +237,5 @@ void Menu::addItem(const xml_node &el, int idx)
 		Menu::alert(e.what());
 	}
 	resetCursor();
-	if (_selection != _items.end()) (*_selection)->toggleHover();
+	//if (_selection != _items.end()) (*_selection)->toggleHover();
 }
