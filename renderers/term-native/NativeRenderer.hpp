@@ -5,8 +5,7 @@
 #ifdef __GNUC__
 	#include <unistd.h>
 	#include <term.h>
-#endif
-#ifdef _MSC_VER
+#elif _MSC_VER
 	#include <windows.h>
 #endif
 
@@ -88,7 +87,7 @@ public:
 		}
         if (!str.empty())
         {
-            std::cout << str << "\n";
+            std::cout << str;
             if (str.back() == '\n') _cursor.x = 0;
             else
             {
@@ -96,7 +95,7 @@ public:
                 _cursor.x = (pos == std::string::npos ? str.length() : str.length() - pos);
             }
         }
-		_cursor.y += std::count(str.begin(), str.end(), '\n') + 1;
+		_cursor.y += std::count(str.begin(), str.end(), '\n');
 	}
 
 private:
