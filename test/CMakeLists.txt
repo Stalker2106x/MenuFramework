@@ -5,8 +5,8 @@ project(MenuFrameworkTest
         LANGUAGES CXX
         DESCRIPTION "Menu Framework Test")
 
-find_library(MenuFramework NAMES MenuFramework.lib MenuFramework.a
-             HINTS ../build/Debug/ ../build/Release/ ../lib/ )
+find_library(MenuFramework NAMES MenuFramework.lib libMenuFramework.a
+             HINTS ../build ../build/Debug ../build/Release ../lib)
 
 find_library(LIBLUA NAMES liblua_static.lib libliblua_static.a
              HINTS ../thirdparty/luac/build
