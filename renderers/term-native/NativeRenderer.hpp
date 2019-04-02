@@ -23,7 +23,7 @@ public:
 
   virtual void setColor(GraphicsRenderer::Color color)
 	{
-		std::cout << ">";
+		//Do nothing, color unsupported
 	}
 
 	virtual void resetAttrs()
