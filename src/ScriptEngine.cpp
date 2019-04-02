@@ -54,7 +54,9 @@ void ScriptEngine::exposeCpp()
     MenuFile menu(xml, DataSource::Document);
 
     if (!menu.load()) Menu::alert("Invalid XML injection");
+	Menu::active->getHoveredItem()->toggleHover(); //Unselect current
     Menu::active->addItem(menu.getData().first_child(), idx);
+	Menu::active->resetCursor(); //Cursor invalidated
   });
   scriptEnv.set_function("getCursor", [] () { return (Menu::active->getCursor()); });
   scriptEnv.set_function("getInputData", [=] (std::string id) {

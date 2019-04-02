@@ -41,9 +41,10 @@ public:
 
   void onLoad();
 
-	void resetCursor();
+  void resetCursor();
   void addAlert(std::shared_ptr<MenuItem> menuItem);
   void clearAlerts();
+  std::shared_ptr<MenuItem> getHoveredItem();
   std::shared_ptr<MenuItem> getItem(const std::string &id);
   void addItem(const xml_node &el, int idx = -1);
   void setClickCallback(std::function<void(std::shared_ptr<MenuItem>)> callback);
@@ -59,7 +60,6 @@ public:
   static std::shared_ptr<GraphicsRenderer> renderer;
   static std::shared_ptr<InputManager> inputmgr;
 private:
-  std::shared_ptr<MenuItem> getHoveredItem();
 
 
   std::string _id;

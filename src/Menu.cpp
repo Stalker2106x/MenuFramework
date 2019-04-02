@@ -30,6 +30,7 @@ Menu::Menu(const std::string &id)
 	{
 		addItem(el);
 	}
+	resetCursor(); //Reset selection
 	if (menu.attribute("OnLoad")) _onLoadScript = menu.attribute("OnLoad").value();
 }
 
@@ -229,7 +230,6 @@ std::shared_ptr<MenuItem> Menu::getItem(const std::string &id)
 
 void Menu::addItem(const xml_node &el, int idx)
 {
-    if (!_items.empty() && _selection != _items.end()) (*_selection)->toggleHover(); //Unselect previous selection if exists
 	try {
 		std::shared_ptr<MenuItem> obj = MenuItem::create(el);
 		auto it = (idx == -1 ? _items.end() : _items.begin() + idx);
@@ -238,5 +238,4 @@ void Menu::addItem(const xml_node &el, int idx)
 	} catch(std::exception &e) {
 		Menu::alert(e.what());
 	}
-	resetCursor(); //Iterator invalidated, reset selection
 }
