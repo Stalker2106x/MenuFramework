@@ -3,15 +3,17 @@
 
 #include <iostream>
 #include "InputManager.hpp"
-#ifdef __GNUC__
-#elif _MSC_VER
-#include <windows.h>
+#if defined(_MSC_VER) || defined(__MINGW32__)
+    #include <windows.h>
+#elif defined(__GNUC__) && !defined(__MINGW32__)
+    #include <termios.h>
+    #include <unistd.h>
+    #define KEY_LEFT    75
+    #define KEY_RIGHT   77
+    #define KEY_UP      72
+    #define KEY_DOWN    80
 #endif
 
-#define KEY_UP 72
-#define KEY_DOWN 80
-#define KEY_LEFT 75
-#define KEY_RIGHT 77
 
 class NativeInput : public InputManager
 {
@@ -19,16 +21,21 @@ public:
     NativeInput()
   : InputManager()
   {
+#if defined(__GNUC__) && !defined(__MINGW32__)
+    struct termios raw;
+    tcgetattr(STDIN_FILENO, &raw);
+    raw.c_lflag &= ~(ECHO);
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
+#endif
   }
 
   ~NativeInput()
   {
   }
-  
+
   InputManager::Keys getInput()
   {
-#ifdef __GNUC__
-#elif _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
       HANDLE hStdIn = GetStdHandle(STD_INPUT_HANDLE);
       DWORD Events = 0;     // Event count
       DWORD EventsRead = 0; // Events read from console
@@ -64,6 +71,26 @@ public:
           } // end EventsRead loop
           delete eventBuffer;
       }
+#elif defined(__GNUC__) && !defined(__MINGW32__)
+    int buffer;
+
+    read(STDIN_FILENO, &buffer, 1)
+    switch (buffer)
+    {
+        case KEY_LEFT:
+        return (InputManager::Keys::Left);
+        case KEY_RIGHT:
+        return (InputManager::Keys::Right);
+        case KEY_UP:
+        return (InputManager::Keys::Up);
+        case KEY_DOWN:
+        return (InputManager::Keys::Down);
+        case '\n':
+        case '\r':
+        return (InputManager::Keys::Enter);
+        case '\b':
+        return (InputManager::Keys::Backspace);
+    }
 #endif
       return (InputManager::Keys::None);
   }

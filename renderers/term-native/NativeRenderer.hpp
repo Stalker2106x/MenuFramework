@@ -2,11 +2,11 @@
 #define NATIVERENDERER_HPP_
 
 #include "GraphicsRenderer.hh"
-#ifdef __GNUC__
-	#include <unistd.h>
-	#include <term.h>
-#elif _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
 	#include <windows.h>
+#elif defined(__GNUC__) && !defined(__MINGW32__)
+    #include <unistd.h>
+    #include <term.h>
 #endif
 
 class NativeRenderer : public GraphicsRenderer
@@ -32,15 +32,7 @@ public:
 
 	virtual void clear()
 	{
-#ifdef __GNUC__
-  	if (!cur_term)
-    {
-			int result;
-			setupterm(NULL, STDOUT_FILENO, &result);
-			if (result <= 0) return;
-    }
-  	putp(tigetstr("clear"));
-#elif _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
     HANDLE                     hStdOut;
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     DWORD                      count;
@@ -74,6 +66,14 @@ public:
 
     /* Move the cursor home */
     SetConsoleCursorPosition(hStdOut, homeCoords);
+#elif defined(__GNUC__) && !defined(__MINGW32__)
+        if (!cur_term)
+        {
+                int result;
+                setupterm(NULL, STDOUT_FILENO, &result);
+                if (result <= 0) return;
+        }
+        putp(tigetstr("clear"));
 #endif
 	_cursor = Point(0,0);
   }
