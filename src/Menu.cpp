@@ -99,7 +99,6 @@ int Menu::getCursor()
 }
 void Menu::resetCursor()
 {
-	if (_selection != _items.end()) (*_selection)->toggleHover(); //Unselect previous selection if exists
 	_selection = _items.begin();
 	while (_selection != _items.end() && !((*_selection)->isSelectable())) _selection++;
 	if (_selection != _items.end()) (*_selection)->toggleHover();
@@ -230,6 +229,7 @@ std::shared_ptr<MenuItem> Menu::getItem(const std::string &id)
 
 void Menu::addItem(const xml_node &el, int idx)
 {
+    if (!_items.empty() && _selection != _items.end()) (*_selection)->toggleHover(); //Unselect previous selection if exists
 	try {
 		std::shared_ptr<MenuItem> obj = MenuItem::create(el);
 		auto it = (idx == -1 ? _items.end() : _items.begin() + idx);
