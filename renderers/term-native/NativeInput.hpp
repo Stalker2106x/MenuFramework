@@ -77,7 +77,7 @@ public:
 #elif defined(__GNUC__) && !defined(__MINGW32__)
     int buffer;
 
-    read(STDIN_FILENO, &buffer, 1)
+    read(STDIN_FILENO, &buffer, 1);
     switch (buffer)
     {
         case KEY_LEFT:
