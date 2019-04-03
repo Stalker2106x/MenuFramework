@@ -5,6 +5,7 @@
 
 MenuFramework is a rich extendable XML menu engine with LUA integrated script engine (C++ exposition capabilities)
 It gives an easy way to add interactive interfaces to your program without hassle
+Code is cross-platform, tested and compiled on Windows, Linux and MacOS !
 
 ![](/test/demo.gif)
 
