@@ -126,18 +126,18 @@ The menus are defined inside XML documents with a specific syntax and various al
   </tr>
   <!-- Input -->
   <tr>
-    <td rowspan="2">Input</td>
+    <td rowspan="1">Input</td>
     <td colspan="2">Field to input characters</td>
   </tr>
   <!-- Select -->
   <tr>
-    <td rowspan="2">Select</td>
-    <td colspan="2">multi-value selection item</td>
+    <td rowspan="1">Select</td>
+    <td colspan="2">Multi-value selector</td>
   </tr>
   <!-- Option -->
   <tr>
     <td rowspan="2">Option</td>
-    <td colspan="2">selectable item from select</td>
+    <td colspan="2">Selectable value option for select</td>
   </tr>
   <tr>
     <td>Value</td>
@@ -146,7 +146,7 @@ The menus are defined inside XML documents with a specific syntax and various al
   <!-- Script -->
   <tr>
     <td rowspan="2">Script</td>
-    <td colspan="2">Lua embedded script called by Id, or position in menu</td>
+    <td colspan="2">Lua script. Can be defined outside of a menu to be called by Id, or inside Menu, will be called when parsed.</td>
   </tr>
   <!-- Alert -->
   <tr>
