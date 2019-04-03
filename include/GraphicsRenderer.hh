@@ -25,8 +25,8 @@ public:
 
   virtual void clear() = 0;
   virtual void draw(const std::string &str, int x, int y) = 0;
-  virtual void setColor(GraphicsRenderer::Color color) = 0;
-  virtual void resetAttrs() = 0;
+  virtual void setColor(GraphicsRenderer::Color color) {};
+  virtual void resetAttrs() {};
 
   void clearScreen();
   void print(std::string str);

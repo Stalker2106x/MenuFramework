@@ -21,15 +21,6 @@ public:
 	{
 	}
 
-  virtual void setColor(GraphicsRenderer::Color color)
-	{
-		//Do nothing, color unsupported
-	}
-
-	virtual void resetAttrs()
-	{
-	}
-
 	virtual void clear()
 	{
 #if defined(_MSC_VER) || defined(__MINGW32__)
