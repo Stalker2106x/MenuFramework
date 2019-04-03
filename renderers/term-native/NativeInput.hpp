@@ -40,36 +40,39 @@ public:
       DWORD Events = 0;     // Event count
       DWORD EventsRead = 0; // Events read from console
 
-      GetNumberOfConsoleInputEvents(hStdIn, &Events);
-      if (Events != 0)
+      while (Events == 0)
       {
-          INPUT_RECORD *eventBuffer = new INPUT_RECORD[Events]; // create event buffer the size of how many Events
-
-          ReadConsoleInput(hStdIn, eventBuffer, Events, &EventsRead);
-          for (DWORD i = 0; i < EventsRead; ++i)
+          GetNumberOfConsoleInputEvents(hStdIn, &Events);
+          if (Events != 0)
           {
-              if (eventBuffer[i].EventType == KEY_EVENT && eventBuffer[i].Event.KeyEvent.bKeyDown) // check if event[i] is a key event && if so is a press not a release
+              INPUT_RECORD *eventBuffer = new INPUT_RECORD[Events]; // create event buffer the size of how many Events
+
+              ReadConsoleInput(hStdIn, eventBuffer, Events, &EventsRead);
+              for (DWORD i = 0; i < EventsRead; ++i)
               {
-                  switch (eventBuffer[i].Event.KeyEvent.wVirtualKeyCode)
+                  if (eventBuffer[i].EventType == KEY_EVENT && eventBuffer[i].Event.KeyEvent.bKeyDown) // check if event[i] is a key event && if so is a press not a release
                   {
-                  case VK_LEFT:
-                      return (InputManager::Keys::Left);
-                  case VK_RIGHT:
-                      return (InputManager::Keys::Right);
-                  case VK_UP:
-                      return (InputManager::Keys::Up);
-                  case VK_DOWN:
-                      return (InputManager::Keys::Down);
-                  case VK_RETURN:
-                      return (InputManager::Keys::Enter);
-                  case VK_DELETE:
-                      return (InputManager::Keys::Backspace);
-                  default:
-                      return (InputManager::Keys::None);
+                      switch (eventBuffer[i].Event.KeyEvent.wVirtualKeyCode)
+                      {
+                      case VK_LEFT:
+                          return (InputManager::Keys::Left);
+                      case VK_RIGHT:
+                          return (InputManager::Keys::Right);
+                      case VK_UP:
+                          return (InputManager::Keys::Up);
+                      case VK_DOWN:
+                          return (InputManager::Keys::Down);
+                      case VK_RETURN:
+                          return (InputManager::Keys::Enter);
+                      case VK_DELETE:
+                          return (InputManager::Keys::Backspace);
+                      default:
+                          return (InputManager::Keys::None);
+                      }
                   }
-              }
-          } // end EventsRead loop
-          delete eventBuffer;
+              } // end EventsRead loop
+              delete eventBuffer;
+          }
       }
 #elif defined(__GNUC__) && !defined(__MINGW32__)
     int buffer;
