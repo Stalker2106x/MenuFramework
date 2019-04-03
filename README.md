@@ -3,7 +3,10 @@
 
 ## About
 
-MenuFramework is a full-fledged XML menu engine with LUA integrated script engine (C++ exposition capabilities)
+MenuFramework is a rich extendable XML menu engine with LUA integrated script engine (C++ exposition capabilities)
+It gives an easy way to add interactive interfaces to your program without hassle
+
+![](/test/demo.gif)
 
 ### Contributors
 
@@ -77,7 +80,7 @@ The menus are defined inside XML documents with a specific syntax and various al
   <!-- Generic -->
   <tr>
     <td rowspan="2">All</td>
-    <td colspan="2">Every element implements these methods</td>
+    <td colspan="2">Every element implements these attributes</td>
   </tr>
   <tr>
     <td>Id</td>
