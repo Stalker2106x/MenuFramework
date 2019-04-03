@@ -1,23 +1,17 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.2)
 
 project(MenuFrameworkTest
         VERSION 1.0.1
-        LANGUAGES CXX
-        DESCRIPTION "Menu Framework Test")
+        LANGUAGES CXX)
 
-find_library(MenuFramework NAMES MenuFramework.lib libMenuFramework.a
-             HINTS ../build ../build/Debug ../build/Release ../lib)
-
-#[[
-find_library(LIBLUA NAMES liblua_static.lib libliblua_static.a
-             HINTS ../thirdparty/luac/build
-                   ../thirdparty/luac/build/Debug
-                   ../thirdparty/luac/build/Release)
-]]
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+      
+find_library(MenuFramework NAMES MenuFramework.lib libMenuFramework.a HINTS ../lib ../build/lib)
 
 include_directories(../include)
 include_directories(../thirdparty/json/include/)
 include_directories(../thirdparty/pugixml/src/)
 
 add_executable(MenuFrameworkTest basic.cpp)
-target_link_libraries(MenuFrameworkTest ${MenuFramework} ${LIBLUA})
+target_link_libraries(MenuFrameworkTest ${MenuFramework})

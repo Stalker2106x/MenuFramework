@@ -67,13 +67,7 @@ public:
     /* Move the cursor home */
     SetConsoleCursorPosition(hStdOut, homeCoords);
 #elif defined(__GNUC__) && !defined(__MINGW32__)
-        if (!cur_term)
-        {
-                int result;
-                setupterm(NULL, STDOUT_FILENO, &result);
-                if (result <= 0) return;
-        }
-        putp(tigetstr("clear"));
+    std::cout << "\033[2J\033[1;1H"; //AINSI Sequence
 #endif
 	_cursor = Point(0,0);
   }
