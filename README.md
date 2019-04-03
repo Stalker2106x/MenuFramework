@@ -25,39 +25,46 @@ you can do so with the following command-lines:
     git submodule init
     git submodule update
 
-Don't forget tu build lua! To do so, go deep down "<REPOSITORY>/thirdparty/luac/" and run the following commands:
-
-    mkdir build
-    cd build
-    cmake ..
-
-When done, build lua with the generated tools, and go to next step.
 The project itself is based on CMake, which means you have to generate the build tools for it.
-Though, generating requires lua to be correctly compiled, so, make sure you have it correctly built before running cmake
+You can generate Makefiles, Visual studio solutions, etc with the following commands (when at repository root)
 
-    cmake .
+    mkdir build && cd build
+    cmake ..
 
 Then, it should generate the correct build tools based on what your cmake is configured for.
 The library has been tested on *C++14* compliant *MinGW, GCC, and MSBuild*.
 
 ## Getting started
 
-The menu framework is based on components: GraphicsRenderer, and InputManager. They allow to use any rendering system to print Menus, and any user input mechanism to interact with user interface.
-You must provide implementation for both of them through the following methods:
+The menu framework is component-driven, the core components are the GraphicsRenderer, and the InputManager.
+They allow to use any rendering system to render Menus, and any user input mechanism to interact with user interface.
+
+Menu framework uses a specific XML markup for menu, which can be supplied either through C++ Strings, or Filesystem.
+A basic example of a program that shows a menu is the following:
+
+ 	  std::string menuDocument;
+    
+	  menuDocument += "<Menu>"
+                    " <Text>Menu Example</Text>"
+                    " <Sep/>"
+                    " <Button Type='Intern' Target='alert(\"Stop pressing me!\")'>Press me!</Button>"
+                    " <Button Type='Intern' Target=''>Do nothing</Button>"
+                    "</Menu>";
+    Menu::goTo("", menuDocument, DataSource::Document);
+    Menu::run();
+
+By default, the framework uses a NativeRenderer and NativeInput, which uses respectively system standard output and input (raw mode).
+If you want, you can provide implementation for both of them through the following methods:
 
     static void Menu::setRenderer(std::shared_ptr<GraphicsRenderer> renderer);
     static void Menu::setInputManager(std::shared_ptr<InputManager> inputmgr);
 
-To do so, just create your own classes, inherit from GraphicsRenderer and InputManager classes, and implement pure virtual functions.
-
-Do not forget to unload menu via
-
-    static void Menu::unload();
+To do so, just create your own renderer and inputmanager, inherit from GraphicsRenderer and InputManager classes, and implement pure virtual functions. Examples can be found [here](renderers/)
 
 ## Adding menus
 
 You may want to create your own menus. Luckily, the next chapter describes all the elements available to create one.
-The menus are defined inside XML files with a specific syntax and various allowed tags & attributes.
+The menus are defined inside XML documents with a specific syntax and various allowed tags & attributes.
 
 ## Menu elements
 
@@ -150,7 +157,7 @@ The menus are defined inside XML files with a specific syntax and various allowe
 
 ## Menu example
 
-This is an example of a basic menu written in racedriver markup:
+This is an example of a basic menu written in mf markup:
 
     <Menu Id="ExampleMenu">
       <Text>Example label</Text>

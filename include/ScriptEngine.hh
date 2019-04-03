@@ -4,9 +4,14 @@
 #include <map>
 #include "export.h"
 #include "DataFile.hh"
-#include <sol/forward.hpp>
 namespace sol {
   class state;
+  template <bool b>
+  class basic_reference;
+  using reference = basic_reference<false>;
+  template <typename base_t>
+  struct basic_environment;
+  using environment = basic_environment<reference>;
 }
 class Menu;
 

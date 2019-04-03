@@ -8,15 +8,16 @@ project(MenuFrameworkTest
 find_library(MenuFramework NAMES MenuFramework.lib libMenuFramework.a
              HINTS ../build ../build/Debug ../build/Release ../lib)
 
+#[[
 find_library(LIBLUA NAMES liblua_static.lib libliblua_static.a
              HINTS ../thirdparty/luac/build
                    ../thirdparty/luac/build/Debug
                    ../thirdparty/luac/build/Release)
+]]
 
 include_directories(../include)
 include_directories(../thirdparty/json/include/)
 include_directories(../thirdparty/pugixml/src/)
-include_directories(../thirdparty/sol2/)
 
 add_executable(MenuFrameworkTest basic.cpp)
 target_link_libraries(MenuFrameworkTest ${MenuFramework} ${LIBLUA})
