@@ -1,6 +1,8 @@
 
 # MenuFramework
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5647b4d9cc5b45c09bfdf5f7778580aa)](https://app.codacy.com/app/Stalker2106x/MenuFramework?utm_source=github.com&utm_medium=referral&utm_content=Stalker2106x/MenuFramework&utm_campaign=Badge_Grade_Dashboard)
+
 ## About
 
 MenuFramework is a rich extendable XML menu engine with LUA integrated script engine (C++ exposition capabilities)
