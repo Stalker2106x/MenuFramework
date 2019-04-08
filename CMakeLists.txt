@@ -6,12 +6,27 @@ project(MenuFramework
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-      
-file(GLOB MenuFrameworkSrc "src/*.cpp")
-file(GLOB PugiXMLSrc "thirdparty/pugixml/src/*.cpp")
-file(GLOB LuaSrc "thirdparty/lua/src/*.c")
 
-add_library(MenuFramework STATIC ${MenuFrameworkSrc} ${PugiXMLSrc} ${LuaSrc})
+# Project
+file(GLOB MenuFrameworkInclude
+    "include/*.hpp"
+    "include/*.hh")
+file(GLOB MenuFrameworkSrc
+    "src/*.cpp")
+file(GLOB MenuFrameworkRenderers
+    "renderers/*/*.hpp"
+    "renderers/*/*.cpp")
+source_group("Renderers" FILES ${MenuFrameworkRenderers})
+
+# PugiXML Dependency
+file(GLOB PugiXMLSrc "thirdparty/pugixml/src/*.cpp")
+source_group("PugiXML" FILES ${PugiXMLSrc})
+
+# LUA Dependency
+file(GLOB LuaSrc "thirdparty/lua/src/*.c")
+source_group("LUA" FILES ${LuaSrc})
+
+add_library(MenuFramework STATIC ${MenuFrameworkInclude} ${MenuFrameworkSrc} ${MenuFrameworkRenderers} ${PugiXMLSrc} ${LuaSrc})
 
 set_source_files_properties(${LuaSrc} PROPERTIES LANGUAGE CXX)
 
@@ -25,8 +40,7 @@ include_directories(renderers)
 include_directories(thirdparty)
 include_directories(thirdparty/json/include)
 include_directories(thirdparty/pugixml/src)
-include_directories(thirdparty/sol2)
 include_directories(thirdparty/lua/src)
-#include_directories(thirdparty/luac/build) #added for luaconf.h
+include_directories(thirdparty/sol2)
 
 target_link_libraries(MenuFramework)

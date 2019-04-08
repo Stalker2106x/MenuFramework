@@ -4,15 +4,21 @@ compiler:
   - gcc
   - clang
 
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-6
+      - g++-6
+      - cmake
+
 before_script:
-  - cd thirdparty/luac/
+  - export CC=gcc-6
+  - export CXX=g++-6
   - mkdir build
   - cd build
   - cmake ..
-  - make
 
 script:
-  - mkdir build
-  - cd build
-  - cmake ..
   - make
