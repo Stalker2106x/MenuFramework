@@ -42,4 +42,4 @@ after_success:
   - lcov --remove coverage.info '/usr/*' "${HOME}"'/.cache/*' --output-file coverage.info
   # output coverage data for debugging (optional)
   - lcov --list coverage.info
-  - coveralls --exclude thridparty --gcov-options '\-lp'
+  - coveralls --exclude thirdparty --gcov-options '\-lp'

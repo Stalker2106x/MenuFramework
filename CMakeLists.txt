@@ -48,7 +48,7 @@ set_source_files_properties(${LuaSrc} PROPERTIES LANGUAGE CXX)
 if (CMAKE_BUILD_TYPE STREQUAL "Coverage" AND CMAKE_COMPILER_IS_GNUCXX)
     include(CodeCoverage)
     APPEND_COVERAGE_COMPILER_FLAGS()
-    SETUP_TARGET_FOR_COVERAGE(${PROJECT_NAME}_coverage ${PROJECT_NAME}_test coverage)
+    SETUP_TARGET_FOR_COVERAGE_LCOV(${PROJECT_NAME}_coverage ${PROJECT_NAME}_test coverage)
 endif()
 
 
