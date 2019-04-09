@@ -3,6 +3,8 @@
 
 ![](https://travis-ci.org/Stalker2106x/MenuFramework.svg?branch=master)
 ![](https://img.shields.io/badge/Modern-C++14-f39f37.svg)
+[![Coverage Status](https://coveralls.io/repos/github/Stalker2106x/MenuFramework/badge.svg?branch=master)](https://coveralls.io/github/Stalker2106x/MenuFramework?branch=master)
+[![Coverity Status](https://scan.coverity.com/projects/18141/badge.svg)](https://scan.coverity.com/projects/stalker2106x-menuframework)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f71ea5beeab44b0abfff01b52f426460)](https://www.codacy.com/app/Stalker2106x/MenuFramework?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Stalker2106x/MenuFramework&amp;utm_campaign=Badge_Grade)
 ![](https://img.shields.io/github/license/stalker2106x/MenuFramework.svg)
 [![Average time to resolve an issue](https://isitmaintained.com/badge/resolution/stalker2106x/MenuFramework.svg)](http://isitmaintained.com/project/stalker2106x/MenuFramework "Average time to resolve an issue")
