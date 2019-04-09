@@ -29,11 +29,10 @@ Code is cross-platform, tested and compiled on Windows, Linux and MacOS !
 	- Lua
 	- Sol2
 
-You need to grab and build dependencies if they are not installed on your machine (which is probably the case),
-you can do so with the following command-lines:
+You need to grab dependencies if they are not installed on your machine (which is probably the case),
+you can do so with the following command-line:
 
-    git submodule init
-    git submodule update
+    git submodule update --init --recursive
 
 The project itself is based on CMake, which means you have to generate the build tools for it.
 You can generate Makefiles, Visual studio solutions, etc with the following commands (when at repository root)
@@ -41,8 +40,10 @@ You can generate Makefiles, Visual studio solutions, etc with the following comm
     mkdir build && cd build
     cmake ..
 
-Then, it should generate the correct build tools based on what your cmake is configured for.
+That procedure should generate the correct build tools based on what your cmake is configured for. You can then just build the library (statically is preferred) and link against it!
 The library has been tested on *C++14* compliant *MinGW, GCC, and MSBuild*.
+
+# Menu system
 
 ## Getting started
 
@@ -71,12 +72,9 @@ If you want, you can provide implementation for both of them through the followi
 
 To do so, just create your own renderer and inputmanager, inherit from GraphicsRenderer and InputManager classes, and implement pure virtual functions. Examples can be found [here](renderers/)
 
-## Adding menus
+## Menu XML elements
 
-You may want to create your own menus. Luckily, the next chapter describes all the elements available to create one.
-The menus are defined inside XML documents with a specific syntax and various allowed tags & attributes.
-
-## Menu elements
+All of the following tag/attributes are writable in MenuFramework markup, and will generate the corresponding widget, based on the position in the hierarchy of the XML Document.
 
 <table style="width:100%;">
   <tr>
@@ -165,9 +163,9 @@ The menus are defined inside XML documents with a specific syntax and various al
   </tr>
 </table>
 
-## Menu example
+## Examples
 
-This is an example of a basic menu written in mf markup:
+This is an example of a basic menu:
 
     <Menu Id="ExampleMenu">
       <Text>Example label</Text>
@@ -175,7 +173,7 @@ This is an example of a basic menu written in mf markup:
       <Button Type='Intern' Target='alert("amazing")'>Print!</Button>
     </Menu>
 
-This is an advanced menu example :
+an advanced menu example :
 
     <Menu Id="NewGame">
       <Text>Game Creation Menu</Text>
@@ -244,9 +242,9 @@ If you need helper lua functions, the following are implemented:
   </tr>
 </table>
 
-## Write your own scripts
+## Adding lua to your menus
 
-For example, the following script prints a menu that lists items and allows to select one
+This is an example of a script that prints a menu that lists items and allows to select one:
 
     <Menu Id="Test" OnLoad="TestOnLoad">
       <Text>Select an item</Text>
@@ -262,3 +260,37 @@ For example, the following script prints a menu that lists items and allows to s
         i = i + 1
       end
     ]]></Script>
+
+Will output:
+
+    Select an item
+
+    Item 1
+    Item 2
+    Item 3
+    Item 4
+
+## Internationalization
+
+By default, the menu framework does not uses the "locale" system. You can load any locale when starting the program, using the static "load" function in localization where langCode is the locale JSON file name.
+
+    Localization::load("en-US"); //Loads english locale
+
+Now, the program will look inside the current working directory for a file named "./en-US.json", which will contains a JSON formatted translated units like so:
+
+    {
+      "localization": "English",
+      "data": {
+        "any.key": "Translated value"
+      }
+    }
+
+You can change the folder where the localization looks for by altering the following variable
+
+    Localization::langLocation = "./my/localization/folder/";
+
+You can insert "Localized" string in your menus through the "Lang" XML element, which will load the corresponding text with Id in the locale file. For example, the following menu will show the previous "any.key" defined unit.
+
+    <Menu>
+      <Lang Id="any.key">
+    </Menu>
