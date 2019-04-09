@@ -138,7 +138,7 @@ void Menu::render()
 	for (size_t i = 0; i < _items.size(); i++)
 	{
 		_items[i]->render();
-		(*renderer) << "\n";
+		renderer->lineBreak();
 	}
 }
 
@@ -179,7 +179,11 @@ void Menu::alert(std::string str)
 		if (!menu.load()) throw(std::runtime_error("Error on loading Alert XML"));
 		Menu::active->addAlert(MenuItem::create(menu.getData().first_child()));
 	}
-	else renderer->print(str+"\n");
+	else
+	{
+		renderer->print(str);
+		renderer->lineBreak();
+	}
 }
 
 void Menu::addAlert(std::shared_ptr<MenuItem> menuItem)

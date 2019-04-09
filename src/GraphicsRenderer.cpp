@@ -1,7 +1,7 @@
 #include "GraphicsRenderer.hh"
 
 GraphicsRenderer::GraphicsRenderer(int x, int y, int fontsize, int spacing)
-  : _position(x, y), _fontsize(fontsize), _spacing(spacing)
+  : _position(x, y), _fontsize(fontsize), _spacing(spacing), _cursor(_position)
 {
 }
 
@@ -11,22 +11,26 @@ GraphicsRenderer::~GraphicsRenderer()
 
 void GraphicsRenderer::print(std::string str)
 {
-  if (str.find("\n") == std::string::npos)
+  size_t nl = str.find("\n");
+
+  while (nl != std::string::npos)
+  {
+    draw(str.substr(0, nl), _cursor.x, lineToY(_cursor.y));
+    lineBreak();
+    str.erase(0, nl + 1);
+    nl = str.find("\n");
+  }
+  if (str.length() > 0)
   {
     draw(str, _cursor.x, lineToY(_cursor.y));
-    return;
+    _cursor.x += str.length();
   }
-  for (size_t i = str.find("\n"); i != std::string::npos; i++)
-  {
-    draw(str.substr(0, i), _cursor.x, lineToY(_cursor.y));
-    _cursor.y++;
-    if (i < str.length() - 1)
-    {
-      i++;
-      str.erase(i, str.length() - i);
-    }
-    else return;
-  }
+}
+
+void GraphicsRenderer::lineBreak()
+{
+  _cursor.x = _position.x;
+  _cursor.y++;
 }
 
 void GraphicsRenderer::clearScreen()
