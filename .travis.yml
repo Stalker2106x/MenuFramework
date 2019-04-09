@@ -27,10 +27,10 @@ before_script:
   - export CXX=g++-6
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake .. -DCMAKE_BUILD_TYPE=Coverage
 
 script:
   - make
 
 after_success:
-  - coveralls --exclude lib --exclude tests --gcov-options '\-lp'
+  - coveralls --exclude thridparty --gcov-options '\-lp'
