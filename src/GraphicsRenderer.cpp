@@ -64,7 +64,8 @@ GraphicsRenderer &operator<<(GraphicsRenderer &renderer, const std::string &str)
 
 GraphicsRenderer &operator<<(GraphicsRenderer &renderer, int data)
 {
-  return (renderer << std::to_string(data));
+  renderer.print(std::to_string(data));
+  return (renderer);
 }
 
 GraphicsRenderer &resetAttrs(GraphicsRenderer &renderer)
