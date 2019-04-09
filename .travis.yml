@@ -36,12 +36,9 @@ script:
 after_success:
   - cd ../bin/
   - ./MenuFramework_test
-  # Create lcov report
-  # capture coverage info
   - lcov --directory ../ --capture --output-file coverage.info
   # filter out system and extra files.
-  # To also not include test code in coverage add them with full path to the patterns: '*/tests/*'
-  - lcov --remove coverage.info '/thirdparty/*' '/usr/*' "${HOME}"'/.cache/*' --output-file coverage.info
+  - lcov --remove coverage.info '/thirdparty/*' '/test/*' '/usr/*' "${HOME}"'/.cache/*' --output-file coverage.info
   # output coverage data for debugging (optional)
   - lcov --list coverage.info
   - coveralls-lcov coverage.info
