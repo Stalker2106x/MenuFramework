@@ -36,7 +36,7 @@ public:
 
   GraphicsRenderer &operator<<(std::function<GraphicsRenderer&(GraphicsRenderer &term)>);
   friend GraphicsRenderer &operator<<(GraphicsRenderer &term, const char *str);
-  friend GraphicsRenderer &operator<<(GraphicsRenderer &term, const std::string str);
+  friend GraphicsRenderer &operator<<(GraphicsRenderer &term, const std::string &str);
   friend GraphicsRenderer &operator<<(GraphicsRenderer &term, int data);
 
 protected:

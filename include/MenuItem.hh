@@ -22,19 +22,20 @@ public:
     Input
   };
 
-  MenuItem(const xml_node &data);
-  MenuItem(std::string label);
+  MenuItem(const xml_node &data, bool selectable = false);
+  MenuItem(std::string label, bool selectable = false);
 
   static std::shared_ptr<MenuItem> create(const xml_node &data);
 
   void toggleHover();
 
   const std::string &getId();
-  virtual bool isSelectable();
+  bool isSelectable();
   virtual void select(std::shared_ptr<InputManager> inputmgr, std::shared_ptr<GraphicsRenderer> renderer);
   virtual void render(std::shared_ptr<GraphicsRenderer> renderer);
 
 protected:
+  bool _selectable;
   std::string _id;
   std::string _label;
   bool _hover;
@@ -54,8 +55,7 @@ public:
   };
   MenuButton(const xml_node &data);
 
-  virtual bool isSelectable();
-  virtual void select();
+  virtual void select(std::shared_ptr<InputManager> inputmgr, std::shared_ptr<GraphicsRenderer> renderer);
   void bind(std::function<void(void)> &callback);
 
 private:
@@ -72,7 +72,6 @@ class MenuInput : public MenuItem
 public:
   MenuInput(const xml_node &data);
 
-  virtual bool isSelectable();
   virtual void select(std::shared_ptr<InputManager> inputmgr, std::shared_ptr<GraphicsRenderer> renderer);
   std::string getData();
   void setData(const std::string data);
@@ -91,7 +90,6 @@ class MenuSelect : public MenuItem
 public:
   MenuSelect(const xml_node &data);
 
-  virtual bool isSelectable();
   virtual void select(std::shared_ptr<InputManager> inputmgr, std::shared_ptr<GraphicsRenderer> renderer);
   std::string getData();
   void setData(const std::string data);
@@ -110,7 +108,6 @@ class MenuScript : public MenuItem
 public:
   MenuScript(const xml_node &data);
 
-  virtual bool isSelectable();
   virtual void render(std::shared_ptr<GraphicsRenderer> renderer);
 };
 
@@ -122,7 +119,6 @@ class MenuAlert : public MenuItem
 public:
   MenuAlert(const xml_node &data);
 
-  virtual bool isSelectable();
   virtual void render(std::shared_ptr<GraphicsRenderer> renderer);
 };
 

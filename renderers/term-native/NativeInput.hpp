@@ -57,18 +57,25 @@ public:
                       {
                       case VK_LEFT:
                           key = InputManager::Keys::Left;
+						  break;
                       case VK_RIGHT:
                           key = InputManager::Keys::Right;
+						  break;
                       case VK_UP:
                           key = InputManager::Keys::Up;
+						  break;
                       case VK_DOWN:
                           key = InputManager::Keys::Down;
+						  break;
                       case VK_RETURN:
                           key = InputManager::Keys::Enter;
+						  break;
                       case VK_DELETE:
                           key = InputManager::Keys::Backspace;
+						  break;
                       default:
                           key = InputManager::Keys::None;
+						  break;
                       }
                       if (key != InputManager::Keys::None)
                       {

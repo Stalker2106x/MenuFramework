@@ -5,15 +5,15 @@
 
 //MenuItem
 
-MenuItem::MenuItem(const xml_node &data)
- : _id(data.attribute("Id").value()),
+MenuItem::MenuItem(const xml_node &data, bool selectable)
+ : _id(data.attribute("Id").value()), _selectable(selectable),
    _label(Localization::substitute(data)),
    _hover(false)
 {
 }
 
-MenuItem::MenuItem(std::string label)
- : _id(),
+MenuItem::MenuItem(std::string label, bool selectable)
+ : _id(), _selectable(selectable),
  _label(Localization::substitute(label)),
  _hover(false)
 {
@@ -60,7 +60,7 @@ void MenuItem::toggleHover()
 
 bool MenuItem::isSelectable()
 {
-  return (false);
+  return (_selectable);
 }
 
 
@@ -88,7 +88,7 @@ void MenuItem::render(std::shared_ptr<GraphicsRenderer> renderer)
 //MenuButton
 
 MenuButton::MenuButton(const xml_node &data)
- : MenuItem(data), _target(data.attribute("Target").value()), _path(data.attribute("Path").value())
+ : MenuItem(data, true), _target(data.attribute("Target").value()), _path(data.attribute("Path").value())
 {
   if (strcmp(data.attribute("Type").value(), "Goto") == 0) _type = Goto;
   else if (strcmp(data.attribute("Type").value(), "Script") == 0) _type = Script;
@@ -96,7 +96,7 @@ MenuButton::MenuButton(const xml_node &data)
   else throw (std::runtime_error("Unknown button type"));
 }
 
-void MenuButton::select()
+void MenuButton::select(std::shared_ptr<InputManager> inputmgr, std::shared_ptr<GraphicsRenderer> renderer)
 {
   switch (_type)
   {
@@ -115,11 +115,6 @@ void MenuButton::select()
   }
 }
 
-bool MenuButton::isSelectable()
-{
-  return (true);
-}
-
 void MenuButton::bind(std::function<void(void)> &callback)
 {
   _type = Cpp;
@@ -129,7 +124,7 @@ void MenuButton::bind(std::function<void(void)> &callback)
 //MenuInput
 
 MenuInput::MenuInput(const xml_node &data)
- : MenuItem(data)
+ : MenuItem(data, true)
 {
 
 }
@@ -147,11 +142,6 @@ void MenuInput::select(std::shared_ptr<InputManager> inputmgr, std::shared_ptr<G
     Menu::active->render(); //Request render to update input
   }
   renderer->clearScreen(); //Clear screen for menu redraw
-}
-
-bool MenuInput::isSelectable()
-{
-  return (true);
 }
 
 std::string MenuInput::getData()
@@ -174,7 +164,7 @@ void MenuInput::render(std::shared_ptr<GraphicsRenderer> renderer)
 //MenuSelect
 
 MenuSelect::MenuSelect(const xml_node &data)
- : MenuItem(data), _cursor(0)
+ : MenuItem(data, true), _cursor(0)
 {
   _label = data.attribute("Text").value();
 	for (pugi::xml_node el = data.first_child(); el; el = el.next_sibling())
@@ -200,11 +190,6 @@ void MenuSelect::select(std::shared_ptr<InputManager> inputmgr, std::shared_ptr<
   renderer->clearScreen(); //Clear screen for menu redraw
 }
 
-bool MenuSelect::isSelectable()
-{
-  return (true);
-}
-
 std::string MenuSelect::getData()
 {
   return (_values[_cursor].second);
@@ -228,13 +213,8 @@ void MenuSelect::render(std::shared_ptr<GraphicsRenderer> renderer)
 //MenuScript
 
 MenuScript::MenuScript(const xml_node &data)
- : MenuItem(data)
+ : MenuItem(data, false)
 {
-}
-
-bool MenuScript::isSelectable()
-{
-  return (false);
 }
 
 void MenuScript::render(std::shared_ptr<GraphicsRenderer> renderer)
@@ -245,13 +225,8 @@ void MenuScript::render(std::shared_ptr<GraphicsRenderer> renderer)
 //MenuAlert
 
 MenuAlert::MenuAlert(const xml_node &data)
- : MenuItem(data)
+ : MenuItem(data, false)
 {
-}
-
-bool MenuAlert::isSelectable()
-{
-  return (false);
 }
 
 void MenuAlert::render(std::shared_ptr<GraphicsRenderer> renderer)
