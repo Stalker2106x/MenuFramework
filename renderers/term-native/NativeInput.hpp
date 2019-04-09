@@ -46,12 +46,12 @@ public:
           if (Events != 0)
           {
               InputManager::Keys key;
-              INPUT_RECORD *eventBuffer = new INPUT_RECORD[Events]; // create event buffer the size of how many Events
+              INPUT_RECORD *eventBuffer = new INPUT_RECORD[Events];
 
               ReadConsoleInput(hStdIn, eventBuffer, Events, &EventsRead);
               for (DWORD i = 0; i < EventsRead; ++i)
               {
-                  if (eventBuffer[i].EventType == KEY_EVENT && eventBuffer[i].Event.KeyEvent.bKeyDown) // check if event[i] is a key event && if so is a press not a release
+                  if (eventBuffer[i].EventType == KEY_EVENT && eventBuffer[i].Event.KeyEvent.bKeyDown)
                   {
                       switch (eventBuffer[i].Event.KeyEvent.wVirtualKeyCode)
                       {
@@ -79,20 +79,21 @@ public:
                       }
                       if (key != InputManager::Keys::None)
                       {
-                          delete eventBuffer;
+                          delete[] eventBuffer;
                           return (key);
                       }
                   }
-              } // end EventsRead loop
-              delete eventBuffer;
+              }
+              delete[] eventBuffer;
           }
       }
 #elif defined(__GNUC__) && !defined(__MINGW32__)
     int buffer;
 
-    read(STDIN_FILENO, &buffer, 4);
-    switch (buffer)
+    if (read(STDIN_FILENO, &buffer, 4) > 0)
     {
+        switch (buffer)
+        {
         case KEY_LEFT:
             return (InputManager::Keys::Left);
         case KEY_RIGHT:
@@ -106,6 +107,7 @@ public:
             return (InputManager::Keys::Enter);
         case '\b':
             return (InputManager::Keys::Backspace);
+        }
     }
 #endif
       return (InputManager::Keys::None);
