@@ -69,20 +69,20 @@ const std::string &MenuItem::getId()
   return (_id);
 }
 
-void MenuItem::select()
+void MenuItem::select(std::shared_ptr<InputManager> inputmgr, std::shared_ptr<GraphicsRenderer> renderer)
 {
   throw(std::runtime_error("MenuItem should not be selected"));
 }
 
-void MenuItem::render()
+void MenuItem::render(std::shared_ptr<GraphicsRenderer> renderer)
 {
   if (_hover)
   {
-    (*Menu::renderer) << setColor(GraphicsRenderer::Color::Red)
-                      << ">";
+    (*renderer) << setColor(GraphicsRenderer::Color::Red)
+                << ">";
   }
-  (*Menu::renderer) << _label;
-  if (_hover) (*Menu::renderer) << resetAttrs;
+  (*renderer) << _label;
+  if (_hover) (*renderer) << resetAttrs;
 }
 
 //MenuButton
@@ -101,10 +101,8 @@ void MenuButton::select()
   switch (_type)
   {
   case Goto:
-  {
     Menu::goTo(_target, _path);
     break;
-  }
   case Script:
     ScriptEngine::runScript(_target);
     break;
@@ -136,23 +134,19 @@ MenuInput::MenuInput(const xml_node &data)
 
 }
 
-void MenuInput::select()
+void MenuInput::select(std::shared_ptr<InputManager> inputmgr, std::shared_ptr<GraphicsRenderer> renderer)
 {
   int input;
 
   Menu::active->render(); //Render once
-  //Menu::renderer->setCursor(2); //Block cursor
-  //Menu::renderer->setCursorPos(_dataPos); //set cursor at end of input
-  while ((input = Menu::inputmgr->getInput()) != InputManager::Keys::Enter)
+  while ((input = inputmgr->getInput()) != InputManager::Keys::Enter)
   {
     if (_data.length() > 0 && (input == InputManager::Keys::Backspace)) _data.erase(--_data.end());
     else _data += input;
-    Menu::renderer->clearScreen();
+    renderer->clearScreen();
     Menu::active->render(); //Request render to update input
-    //Menu::renderer->setCursorPos(_dataPos); //set cursor at end of input
   }
-  Menu::renderer->clearScreen(); //Clear screen for menu redraw
-  //Menu::renderer->setCursor(0); //Disable cursor
+  renderer->clearScreen(); //Clear screen for menu redraw
 }
 
 bool MenuInput::isSelectable()
@@ -170,10 +164,10 @@ void MenuInput::setData(const std::string data)
   _data = data;
 }
 
-void MenuInput::render()
+void MenuInput::render(std::shared_ptr<GraphicsRenderer> renderer)
 {
-  MenuItem::render();
-  (*Menu::renderer) << ": " + _data;
+  MenuItem::render(renderer);
+  (*renderer) << ": " + _data;
   //_dataPos = Menu::renderer->getCursorPos(); //WEIRD ? should be static
 }
 
@@ -189,21 +183,21 @@ MenuSelect::MenuSelect(const xml_node &data)
   }
 }
 
-void MenuSelect::select()
+void MenuSelect::select(std::shared_ptr<InputManager> inputmgr, std::shared_ptr<GraphicsRenderer> renderer)
 {
   int input;
 
   Menu::active->render(); //Render once
-  while ((input = Menu::inputmgr->getInput()) != InputManager::Keys::Enter)
+  while ((input = inputmgr->getInput()) != InputManager::Keys::Enter)
   {
     if (input == InputManager::Keys::Left) --_cursor;
     else if (input == InputManager::Keys::Right) ++_cursor;
     if (_cursor < 0) _cursor = _values.size()-1;
     if (static_cast<size_t>(_cursor) >= _values.size()) _cursor = 0;
-    Menu::renderer->clearScreen();
+    renderer->clearScreen();
     Menu::active->render(); //Request render to update input
   }
-  Menu::renderer->clearScreen(); //Clear screen for menu redraw
+  renderer->clearScreen(); //Clear screen for menu redraw
 }
 
 bool MenuSelect::isSelectable()
@@ -224,10 +218,10 @@ void MenuSelect::setData(const std::string data)
   _cursor = value - _values.begin();
 }
 
-void MenuSelect::render()
+void MenuSelect::render(std::shared_ptr<GraphicsRenderer> renderer)
 {
-  MenuItem::render();
-  (*Menu::renderer) << "    <" + _values[_cursor].first + ">";
+  MenuItem::render(renderer);
+  (*renderer) << "    <" + _values[_cursor].first + ">";
 }
 
 
@@ -243,7 +237,7 @@ bool MenuScript::isSelectable()
   return (false);
 }
 
-void MenuScript::render()
+void MenuScript::render(std::shared_ptr<GraphicsRenderer> renderer)
 {
   ScriptEngine::run(_label);
 }
@@ -260,7 +254,7 @@ bool MenuAlert::isSelectable()
   return (false);
 }
 
-void MenuAlert::render()
+void MenuAlert::render(std::shared_ptr<GraphicsRenderer> renderer)
 {
-  (*Menu::renderer) << "::::\n" << _label << "\n::::\n";
+  (*renderer) << "::::\n" << _label << "\n::::\n";
 }

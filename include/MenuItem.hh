@@ -5,6 +5,8 @@
 #include <string>
 #include "export.h"
 #include "Point.hpp"
+#include "GraphicsRenderer.hh"
+#include "InputManager.hpp"
 #include "DataFile.hh"
 
 #define TARGET_SEPARATOR  ":"
@@ -29,8 +31,8 @@ public:
 
   const std::string &getId();
   virtual bool isSelectable();
-  virtual void select();
-  virtual void render();
+  virtual void select(std::shared_ptr<InputManager> inputmgr, std::shared_ptr<GraphicsRenderer> renderer);
+  virtual void render(std::shared_ptr<GraphicsRenderer> renderer);
 
 protected:
   std::string _id;
@@ -71,10 +73,10 @@ public:
   MenuInput(const xml_node &data);
 
   virtual bool isSelectable();
-  virtual void select();
+  virtual void select(std::shared_ptr<InputManager> inputmgr, std::shared_ptr<GraphicsRenderer> renderer);
   std::string getData();
   void setData(const std::string data);
-  virtual void render();
+  virtual void render(std::shared_ptr<GraphicsRenderer> renderer);
 
 private:
   std::string _data;
@@ -90,10 +92,10 @@ public:
   MenuSelect(const xml_node &data);
 
   virtual bool isSelectable();
-  virtual void select();
+  virtual void select(std::shared_ptr<InputManager> inputmgr, std::shared_ptr<GraphicsRenderer> renderer);
   std::string getData();
   void setData(const std::string data);
-  virtual void render();
+  virtual void render(std::shared_ptr<GraphicsRenderer> renderer);
 
 private:
   std::vector<std::pair<std::string, std::string>> _values;
@@ -109,7 +111,7 @@ public:
   MenuScript(const xml_node &data);
 
   virtual bool isSelectable();
-  virtual void render();
+  virtual void render(std::shared_ptr<GraphicsRenderer> renderer);
 };
 
 /*!
@@ -121,7 +123,7 @@ public:
   MenuAlert(const xml_node &data);
 
   virtual bool isSelectable();
-  virtual void render();
+  virtual void render(std::shared_ptr<GraphicsRenderer> renderer);
 };
 
 

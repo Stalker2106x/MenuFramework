@@ -81,18 +81,18 @@ public:
     switch (buffer)
     {
         case KEY_LEFT:
-        return (InputManager::Keys::Left);
+            return (InputManager::Keys::Left);
         case KEY_RIGHT:
-        return (InputManager::Keys::Right);
+            return (InputManager::Keys::Right);
         case KEY_UP:
-        return (InputManager::Keys::Up);
+            return (InputManager::Keys::Up);
         case KEY_DOWN:
-        return (InputManager::Keys::Down);
+            return (InputManager::Keys::Down);
         case '\n':
         case '\r':
-        return (InputManager::Keys::Enter);
+            return (InputManager::Keys::Enter);
         case '\b':
-        return (InputManager::Keys::Backspace);
+            return (InputManager::Keys::Backspace);
     }
 #endif
       return (InputManager::Keys::None);

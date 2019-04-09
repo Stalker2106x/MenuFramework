@@ -14,6 +14,8 @@ namespace sol {
   using environment = basic_environment<reference>;
 }
 class Menu;
+class GraphicsRenderer;
+class InputManager;
 
 struct MF_API ScriptEngine
 {
@@ -26,7 +28,7 @@ struct MF_API ScriptEngine
 
   static void loadScripts(const xml_document &doc);
 
-  static void console(Menu &currentMenu);
+  static void console(Menu &currentMenu, std::shared_ptr<InputManager> inputmgr, std::shared_ptr<GraphicsRenderer> renderer);
 
   static sol::state engine;
   static sol::environment scriptEnv;
