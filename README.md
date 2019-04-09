@@ -1,7 +1,7 @@
 
 # MenuFramework
 
-![](https://travis-ci.org/Stalker2106x/MenuFramework.svg?branch=master)
+[![Travis CI](https://travis-ci.org/Stalker2106x/MenuFramework.svg?branch=master)](https://travis-ci.org/Stalker2106x/MenuFramework)
 ![](https://img.shields.io/badge/Modern-C++14-f39f37.svg)
 [![Coverage Status](https://coveralls.io/repos/github/Stalker2106x/MenuFramework/badge.svg?branch=master)](https://coveralls.io/github/Stalker2106x/MenuFramework?branch=master)
 [![Coverity Status](https://scan.coverity.com/projects/18141/badge.svg)](https://scan.coverity.com/projects/stalker2106x-menuframework)
