@@ -10,11 +10,12 @@ void Localization::clear()
 
 std::string Localization::substitute(std::string data)
 {
-  size_t beg = 0, end;
+  size_t beg = 0;
   std::string str;
+
   while ((beg = data.find("<Lang")) != std::string::npos)
   {
-    end = 0;
+    size_t end = 0;
     str += data.substr(0, beg);
     if ((end = data.find("/>")) != std::string::npos)
     {

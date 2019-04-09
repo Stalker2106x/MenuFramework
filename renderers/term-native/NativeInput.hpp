@@ -45,6 +45,7 @@ public:
           GetNumberOfConsoleInputEvents(hStdIn, &Events);
           if (Events != 0)
           {
+              InputManager::Keys key;
               INPUT_RECORD *eventBuffer = new INPUT_RECORD[Events]; // create event buffer the size of how many Events
 
               ReadConsoleInput(hStdIn, eventBuffer, Events, &EventsRead);
@@ -55,19 +56,24 @@ public:
                       switch (eventBuffer[i].Event.KeyEvent.wVirtualKeyCode)
                       {
                       case VK_LEFT:
-                          return (InputManager::Keys::Left);
+                          key = InputManager::Keys::Left;
                       case VK_RIGHT:
-                          return (InputManager::Keys::Right);
+                          key = InputManager::Keys::Right;
                       case VK_UP:
-                          return (InputManager::Keys::Up);
+                          key = InputManager::Keys::Up;
                       case VK_DOWN:
-                          return (InputManager::Keys::Down);
+                          key = InputManager::Keys::Down;
                       case VK_RETURN:
-                          return (InputManager::Keys::Enter);
+                          key = InputManager::Keys::Enter;
                       case VK_DELETE:
-                          return (InputManager::Keys::Backspace);
+                          key = InputManager::Keys::Backspace;
                       default:
-                          return (InputManager::Keys::None);
+                          key = InputManager::Keys::None;
+                      }
+                      if (key != InputManager::Keys::None)
+                      {
+                          delete eventBuffer;
+                          return (key);
                       }
                   }
               } // end EventsRead loop
@@ -77,7 +83,7 @@ public:
 #elif defined(__GNUC__) && !defined(__MINGW32__)
     int buffer;
 
-    read(STDIN_FILENO, &buffer, 1);
+    read(STDIN_FILENO, &buffer, 4);
     switch (buffer)
     {
         case KEY_LEFT:

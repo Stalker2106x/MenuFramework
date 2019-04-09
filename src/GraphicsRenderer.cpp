@@ -57,7 +57,7 @@ GraphicsRenderer &operator<<(GraphicsRenderer &renderer, const char *str)
   return (renderer);
 }
 
-GraphicsRenderer &operator<<(GraphicsRenderer &renderer, const std::string str)
+GraphicsRenderer &operator<<(GraphicsRenderer &renderer, const std::string &str)
 {
   return (renderer << str.c_str());
 }

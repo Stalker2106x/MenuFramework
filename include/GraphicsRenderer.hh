@@ -47,7 +47,7 @@ protected:
 };
 
 GraphicsRenderer &operator<<(GraphicsRenderer &term, const char *str);
-GraphicsRenderer &operator<<(GraphicsRenderer &term, const std::string str);
+GraphicsRenderer &operator<<(GraphicsRenderer &term, const std::string &str);
 GraphicsRenderer &operator<<(GraphicsRenderer &term, int data);
 
 class setColor

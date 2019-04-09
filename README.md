@@ -1,4 +1,3 @@
-
 # MenuFramework
 
 [![Travis CI](https://travis-ci.org/Stalker2106x/MenuFramework.svg?branch=master)](https://travis-ci.org/Stalker2106x/MenuFramework)
@@ -23,9 +22,9 @@ Code is cross-platform, tested and compiled on Windows, Linux and MacOS !
 	- Stabax
 	- Stalker2106
 
-## How to Build ###
+## How to Build
 
-### Dependencies ###
+### Dependencies
 
 	- Nlhomann's json
 	- Pugixml
@@ -46,9 +45,9 @@ You can generate Makefiles, Visual studio solutions, etc with the following comm
 That procedure should generate the correct build tools based on what your cmake is configured for. You can then just build the library (statically is preferred) and link against it!
 The library has been tested on *C++14* compliant *MinGW, GCC, and MSBuild*.
 
-# Menu system
+## Menu system
 
-## Getting started
+### Getting started
 
 The menu framework is component-driven, the core components are the GraphicsRenderer, and the InputManager.
 They allow to use any rendering system to render Menus, and any user input mechanism to interact with user interface.
@@ -75,7 +74,7 @@ If you want, you can provide implementation for both of them through the followi
 
 To do so, just create your own renderer and inputmanager, inherit from GraphicsRenderer and InputManager classes, and implement pure virtual functions. Examples can be found [here](renderers/)
 
-## Menu XML elements
+### Menu XML elements
 
 All of the following tag/attributes are writable in MenuFramework markup, and will generate the corresponding widget, based on the position in the hierarchy of the XML Document.
 
@@ -166,7 +165,7 @@ All of the following tag/attributes are writable in MenuFramework markup, and wi
   </tr>
 </table>
 
-## Examples
+### Examples
 
 This is an example of a basic menu:
 
@@ -197,7 +196,7 @@ an advanced menu example :
 
 You may want to have custom behaviour inside your menus, thats why the framework implements its own script engine. The language of the script is lua, which allow very simple learning for easy customization, and exposes C++ Data easily (C++ binding is explained in next chapter)
 
-## Script C++ Binding
+### Script C++ Binding
 
 If you need helper lua functions, the following are implemented:
 
@@ -207,10 +206,6 @@ If you need helper lua functions, the following are implemented:
     <th>Description</th>
   </tr>
   <!-- Generic -->
-  <tr>
-    <td>print(string)</td>
-    <td>print given string to terminal at current cursor position</td>
-  </tr>
   <tr>
     <td>alert(string)</td>
     <td>add an alert with given string to current menu</td>
@@ -245,7 +240,7 @@ If you need helper lua functions, the following are implemented:
   </tr>
 </table>
 
-## Adding lua to your menus
+### Adding lua to your menus
 
 This is an example of a script that prints a menu that lists items and allows to select one:
 
@@ -273,7 +268,7 @@ Will output:
     Item 3
     Item 4
 
-## Internationalization
+### Internationalization
 
 By default, the menu framework does not uses the "locale" system. You can load any locale when starting the program, using the static "load" function in localization where langCode is the locale JSON file name.
 
