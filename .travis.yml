@@ -34,6 +34,8 @@ script:
   - make
 
 after_success:
+  - cd ../bin/
+  - ./MenuFramework_test
   # Create lcov report
   # capture coverage info
   - lcov --directory . --capture --output-file coverage.info

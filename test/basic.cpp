@@ -7,15 +7,17 @@ int main(int argc, char **argv)
 {
 	std::string menuDocument;
 
-	menuDocument += "<Menu>"
-                  " <Text>Menu Example</Text>"
-                  " <Sep/>"
-                  " <Button Type='Intern' Target='exit()'>ExitTest</Button>"
-                  "</Menu>";
+	menuDocument += "<Menu OnLoad='InitScript'>"
+		" <Text>Menu Example</Text>"
+		" <Sep/>"
+		" <Button Type='Intern' Target='exit()'>ExitTest</Button>"
+		" <Button Type='Intern' Target='exit()'>SS</Button>"
+		"</Menu>"
+		"<Script Id='InitScript'><![CDATA["
+		"exit()"
+		"]]></Script>";
   Menu::goTo("", menuDocument, DataSource::Document);
   Menu::run();
-  std::this_thread::sleep_for(std::chrono::milliseconds(500));
-  Menu::active->selectCursor();
   Menu::unload();
   return (0);
 }
