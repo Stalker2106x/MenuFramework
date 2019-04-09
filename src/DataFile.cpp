@@ -78,9 +78,9 @@ const json &DataFile::getData()
   return (_data);
 }
 
-bool DataFile::rename(const std::string &oldName, const std::string &newName)
+bool DataFile::rename(const std::string &path, const std::string &oldName, const std::string &newName)
 {
-  std::string path = "./Data/Saves/";
+  if (path.end() != '/') path += '/';
   return (std::rename((path+oldName+".json").c_str(), (path+newName+".json").c_str()) == 0);
 }
 

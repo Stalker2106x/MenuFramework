@@ -1,6 +1,7 @@
 #include "Localization.hh"
 
 std::map<std::string, std::string> Localization::data;
+std::string Localization::langLocation = "./";
 
 void Localization::clear()
 {

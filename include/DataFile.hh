@@ -25,7 +25,7 @@ public:
 
 
   static bool erase(const std::string &name);
-  static bool rename(const std::string &oldName, const std::string &newName);
+  static bool rename(const std::string &path, const std::string &oldName, const std::string &newName);
   static std::vector<std::string> getFolderContents(std::string path, std::string filter = "", bool truncateFilter = false);
 
   bool load();
