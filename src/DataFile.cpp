@@ -1,9 +1,8 @@
 #include "DataFile.hh"
 #ifdef __GNUC__
-#include <dirent.h>
-#endif
-#ifdef _MSC_VER
-#include "dirent/dirent.h"
+  #include <dirent.h>
+#elif _MSC_VER
+  #include "dirent/dirent.h"
 #endif
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
@@ -78,9 +77,14 @@ const json &DataFile::getData()
   return (_data);
 }
 
-bool DataFile::rename(const std::string &oldName, const std::string &newName)
+void DataFile::correctPath(std::string &path)
 {
-  std::string path = "./Data/Saves/";
+  if (path.back() != '/') path += '/';
+}
+
+bool DataFile::rename(std::string &path, const std::string &oldName, const std::string &newName)
+{
+  correctPath(path);
   return (std::rename((path+oldName+".json").c_str(), (path+newName+".json").c_str()) == 0);
 }
 

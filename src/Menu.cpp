@@ -2,7 +2,7 @@
 #include "Menu.hh"
 #include "ScriptEngine.hh"
 #include "Point.hpp"
-//Native renderer
+//Native _renderer
 #include "term-native/NativeInput.hpp"
 #include "term-native/NativeRenderer.hpp"
 
@@ -10,8 +10,9 @@
 
 std::shared_ptr<Menu> Menu::active = nullptr;
 std::shared_ptr<MenuFile> Menu::activeDoc = nullptr;
-std::shared_ptr<GraphicsRenderer> Menu::renderer = std::make_shared<NativeRenderer>();
-std::shared_ptr<InputManager> Menu::inputmgr = std::make_shared<NativeInput>();
+//std::unique_ptr<std::thread> Menu::_instance = nullptr;
+std::shared_ptr<GraphicsRenderer> Menu::_renderer = std::make_shared<NativeRenderer>();
+std::shared_ptr<InputManager> Menu::_inputmgr = std::make_shared<NativeInput>();
 bool Menu::quit = false;
 
 Menu::Menu(const std::string &id)
@@ -34,24 +35,27 @@ Menu::Menu(const std::string &id)
 	if (menu.attribute("OnLoad")) _onLoadScript = menu.attribute("OnLoad").value();
 }
 
-//Init routines
-
 void Menu::setRenderer(std::shared_ptr<GraphicsRenderer> renderer)
 {
-	Menu::renderer = renderer;
+	Menu::_renderer = renderer;
 }
 
 void Menu::setInputManager(std::shared_ptr<InputManager> inputmgr)
 {
-	Menu::inputmgr = inputmgr;
+	Menu::_inputmgr = inputmgr;
+}
+
+void Menu::selectCursor()
+{
+	(*active->_selection)->select(_inputmgr, _renderer);
 }
 
 void Menu::unload()
 {
 	Menu::active = nullptr;
 	Menu::activeDoc = nullptr;
-	Menu::renderer = nullptr;
-	Menu::inputmgr = nullptr;
+	Menu::_renderer = nullptr;
+	Menu::_inputmgr = nullptr;
 }
 
 void Menu::onLoad()
@@ -78,12 +82,12 @@ void Menu::setClickCallback(std::function<void(std::shared_ptr<MenuItem>)> callb
 
 bool Menu::update()
 {
-	InputManager::Keys input = inputmgr->getInput();
+	InputManager::Keys input = _inputmgr->getInput();
 
 	if(input == InputManager::Keys::Up) updateCursor(false);
 	else if(input == InputManager::Keys::Down) updateCursor(true);
-	else if(input == InputManager::Keys::Enter) (*_selection)->select();
-	else if (input == InputManager::Keys::F11) ScriptEngine::console(*this);
+	else if(input == InputManager::Keys::Enter) (*_selection)->select(_inputmgr, _renderer);
+	else if (input == InputManager::Keys::F11) ScriptEngine::console(*this, _inputmgr, _renderer);
 	else return (false);
 	return (true);
 }
@@ -98,6 +102,7 @@ int Menu::getCursor()
 	if (cursor >= _items.size()) return (-1);
 	return (cursor);
 }
+
 void Menu::resetCursor()
 {
 	_selection = _items.begin();
@@ -128,22 +133,23 @@ void Menu::updateCursor(bool add)
 
 void Menu::renderAlerts()
 {
-	for (size_t i = 0; i <_alerts.size(); i++) _alerts[i]->render();
+	for (size_t i = 0; i <_alerts.size(); i++) _alerts[i]->render(_renderer);
 }
 
 void Menu::render()
 {
-	renderer->clearScreen();
+	_renderer->clearScreen();
 	renderAlerts();
 	for (size_t i = 0; i < _items.size(); i++)
 	{
-		_items[i]->render();
-		(*renderer) << "\n";
+		_items[i]->render(_renderer);
+		_renderer->lineBreak();
 	}
 }
 
-bool Menu::run()
+void Menu::run()
 {
+	//_instance = std::make_unique<std::thread>([=] () {
 	while (!quit)
 	{
 		active->render();
@@ -155,7 +161,7 @@ bool Menu::run()
 			}
 		}
 	}
-	return (true);
+	//});
 }
 
 std::shared_ptr<MenuItem> Menu::getHoveredItem()
@@ -165,9 +171,9 @@ std::shared_ptr<MenuItem> Menu::getHoveredItem()
 
 void Menu::renderConsole(std::string command)
 {
-	renderer->clearScreen();
-	for (size_t i = 0; i <_alerts.size(); i++) _alerts[i]->render();
-  (*renderer) << "> " << command;
+	_renderer->clearScreen();
+	for (size_t i = 0; i <_alerts.size(); i++) _alerts[i]->render(_renderer);
+  (*_renderer) << "> " << command;
 }
 
 void Menu::alert(std::string str)
@@ -179,7 +185,11 @@ void Menu::alert(std::string str)
 		if (!menu.load()) throw(std::runtime_error("Error on loading Alert XML"));
 		Menu::active->addAlert(MenuItem::create(menu.getData().first_child()));
 	}
-	else renderer->print(str+"\n");
+	else
+	{
+		_renderer->print(str);
+		_renderer->lineBreak();
+	}
 }
 
 void Menu::addAlert(std::shared_ptr<MenuItem> menuItem)

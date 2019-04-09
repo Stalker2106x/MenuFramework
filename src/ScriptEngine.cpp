@@ -2,6 +2,8 @@
 #include "Localization.hh"
 #include "ScriptEngine.hh"
 #include "Menu.hh"
+#include "GraphicsRenderer.hh"
+#include "InputManager.hpp"
 
 std::map<std::string, std::string> ScriptEngine::scripts = std::map<std::string, std::string>();
 std::map<std::string, std::string> ScriptEngine::environment = std::map<std::string, std::string>();
@@ -38,10 +40,10 @@ void ScriptEngine::run(const std::string &script)
 void ScriptEngine::exposeCpp()
 {
   //General
-  scriptEnv.set_function("print", [=] (std::string x) { (*Menu::renderer) << x; });
+  //scriptEnv.set_function("print", [=] (std::string x) { (*Menu::renderer) << x; });
   scriptEnv.set_function("tostring", [=] (int x) { return (std::to_string(x)); });
   scriptEnv.set_function("toint", [=] (std::string str) { return (atoi(str.c_str())); });
-  scriptEnv.set_function("clearScreen", [] () { (*Menu::renderer).clearScreen(); });
+  //scriptEnv.set_function("clearScreen", [] () { (*Menu::renderer).clearScreen(); });
   //scriptEnv.set_function("pause", [] () { getch(); });
   scriptEnv.set_function("exit", [] () { Menu::quit = true; });
   scriptEnv.set_function("alert", [=] (std::string msg) { Menu::alert(msg); });
@@ -89,15 +91,15 @@ void ScriptEngine::loadScripts(const xml_document &doc)
 	}
 }
 
-void ScriptEngine::console(Menu &currentMenu)
+void ScriptEngine::console(Menu &currentMenu, std::shared_ptr<InputManager> inputmgr, std::shared_ptr<GraphicsRenderer> renderer)
 {
   int input;
   std::string command;
 
   currentMenu.renderConsole(command); //Renders console
-  while ((input = Menu::inputmgr->getInput()) != InputManager::Keys::F11)
+  while ((input = inputmgr->getInput()) != InputManager::Keys::F11)
   {
-    Menu::renderer->clearScreen();
+    renderer->clearScreen();
     if (input == InputManager::Keys::Enter)
     {
       run(command);
@@ -107,5 +109,5 @@ void ScriptEngine::console(Menu &currentMenu)
     else command += input;
     currentMenu.renderConsole(command);
   }
-  Menu::renderer->clearScreen();
+  renderer->clearScreen();
 }

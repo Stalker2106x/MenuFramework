@@ -13,6 +13,7 @@ struct MF_API Localization
   static void load(std::string langCode);
 
   static std::map<std::string, std::string> data;
+  static std::string langLocation;
 };
 
 #endif /* !LOCALIZATION_HH_ */

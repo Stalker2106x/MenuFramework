@@ -28,6 +28,7 @@ public:
   virtual void setColor(GraphicsRenderer::Color color) {};
   virtual void resetAttrs() {};
 
+  void lineBreak();
   void clearScreen();
   void print(std::string str);
 

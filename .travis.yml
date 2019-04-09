@@ -12,13 +12,34 @@ addons:
       - gcc-6
       - g++-6
       - cmake
+      - lcov
+  coverity_scan:
+    project:
+      name: "Stalker2106x/MenuFramework"
+      description: "XML/Lua Menu Framework"
+    notification_email: contact@maximemartens.fr
+    build_command_prepend: "before_script"
+    build_command: "script"
+    branch_pattern: coverity_scan
 
 before_script:
+  - pip install --user cpp-coveralls
   - export CC=gcc-6
   - export CXX=g++-6
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake .. -DCMAKE_BUILD_TYPE=Coverage
 
 script:
   - make
+
+after_success:
+  # Create lcov report
+  # capture coverage info
+  - lcov --directory . --capture --output-file coverage.info
+  # filter out system and extra files.
+  # To also not include test code in coverage add them with full path to the patterns: '*/tests/*'
+  - lcov --remove coverage.info '/usr/*' "${HOME}"'/.cache/*' --output-file coverage.info
+  # output coverage data for debugging (optional)
+  - lcov --list coverage.info
+  - coveralls --exclude thirdparty --gcov-options '\-lp'

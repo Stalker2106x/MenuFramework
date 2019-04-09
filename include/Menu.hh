@@ -6,6 +6,7 @@
 #include <deque>
 #include <map>
 #include <memory>
+//#include <thread>
 #include <functional>
 #include "export.h"
 #include "GraphicsRenderer.hh"
@@ -31,11 +32,20 @@ public:
 
   static void goTo(std::string id, std::string source = "", DataSource sourceMode = DataSource::Filesystem);
   static void popUp(std::string id, std::string source = "", DataSource sourceMode = DataSource::Filesystem);
-  static bool run();
+  static void run();
 
+  static void selectCursor();
+
+  static bool quit;
   static std::shared_ptr<Menu> active;
   static std::shared_ptr<MenuFile> activeDoc;
 
+private:
+  //static std::unique_ptr<std::thread> _instance;
+  static std::shared_ptr<GraphicsRenderer> _renderer;
+  static std::shared_ptr<InputManager> _inputmgr;
+
+public:
   //Instance
   Menu(const std::string &id);
 
@@ -56,12 +66,7 @@ public:
   void render();
   void renderConsole(std::string command);
 
-  static bool quit;
-  static std::shared_ptr<GraphicsRenderer> renderer;
-  static std::shared_ptr<InputManager> inputmgr;
 private:
-
-
   std::string _id;
   InputManager::Keys _lastInput;
   std::vector<std::shared_ptr<MenuItem>>::const_iterator _selection;

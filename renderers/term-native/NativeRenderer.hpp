@@ -70,17 +70,17 @@ public:
 			std::cout << "\n";
             _cursor.y++;
 		}
+        while (_cursor.x < x)
+		{
+			std::cout << " ";
+            _cursor.x++;
+		}
         if (!str.empty())
         {
             std::cout << str;
-            if (str.back() == '\n') _cursor.x = 0;
-            else
-            {
-                size_t pos = str.find('\n');
-                _cursor.x = (pos == std::string::npos ? str.length() : str.length() - pos);
-            }
+            _cursor.x += str.length();
         }
-		_cursor.y += std::count(str.begin(), str.end(), '\n');
+        std::cout << std::flush;
 	}
 
 private:
