@@ -12,6 +12,7 @@ addons:
       - gcc-6
       - g++-6
       - cmake
+      - lcov
   coverity_scan:
     project:
       name: "Stalker2106x/MenuFramework"
@@ -33,4 +34,12 @@ script:
   - make
 
 after_success:
+  # Create lcov report
+  # capture coverage info
+  - lcov --directory . --capture --output-file coverage.info
+  # filter out system and extra files.
+  # To also not include test code in coverage add them with full path to the patterns: '*/tests/*'
+  - lcov --remove coverage.info '/usr/*' "${HOME}"'/.cache/*' --output-file coverage.info
+  # output coverage data for debugging (optional)
+  - lcov --list coverage.info
   - coveralls --exclude thridparty --gcov-options '\-lp'
