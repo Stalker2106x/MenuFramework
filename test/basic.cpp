@@ -13,7 +13,7 @@ int main(int argc, char **argv)
   													 " </Select>"
   													 " <Input Id='InputTest' />"
   													 " <Script><![CDATA["
-														 "	 alert('Hello, i'm an alert')"
+														 "	 alert(\"Hello, i'm an alert\")"
 														 "	 tostring(5)"
 														 "	 getCursor()"
 														 "	 getInputData(\"InputTest\")"
