@@ -12,8 +12,17 @@ addons:
       - gcc-6
       - g++-6
       - cmake
+  coverity_scan:
+    project:
+      name: "Stalker2106x/MenuFramework"
+      description: "XML/Lua Menu Framework"
+    notification_email: contact@maximemartens.fr
+    build_command_prepend: "before_script"
+    build_command: "script"
+    branch_pattern: coverity_scan
 
 before_script:
+  - pip install --user cpp-coveralls
   - export CC=gcc-6
   - export CXX=g++-6
   - mkdir build
@@ -22,3 +31,6 @@ before_script:
 
 script:
   - make
+
+after_success:
+  - coveralls --exclude lib --exclude tests --gcov-options '\-lp'
