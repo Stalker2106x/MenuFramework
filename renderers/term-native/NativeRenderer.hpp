@@ -13,7 +13,7 @@ class NativeRenderer : public GraphicsRenderer
 {
 public:
 	NativeRenderer()
-	: GraphicsRenderer(0, 0), _cursor(0, 0)
+	: GraphicsRenderer()
 	{
 	}
 
@@ -69,6 +69,7 @@ public:
 		{
 			std::cout << "\n";
             _cursor.y++;
+            _cursor.x = 0;
 		}
         while (_cursor.x < x)
 		{

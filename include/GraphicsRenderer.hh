@@ -20,7 +20,7 @@ public:
 	  Cyan
   };
 
-  GraphicsRenderer(int x, int y, int fontsize = 1, int spacing = 0);
+  GraphicsRenderer(int x = 0, int y = 0, int fontsize = 1, int spacing = 0);
   virtual ~GraphicsRenderer();
 
   virtual void clear() = 0;

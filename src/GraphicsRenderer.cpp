@@ -1,8 +1,9 @@
 #include "GraphicsRenderer.hh"
 
 GraphicsRenderer::GraphicsRenderer(int x, int y, int fontsize, int spacing)
-  : _position(x, y), _fontsize(fontsize), _spacing(spacing), _cursor(_position)
+  : _position(x, y), _fontsize(fontsize), _spacing(spacing)
 {
+  _cursor = Point(_position.x, _position.y);
 }
 
 GraphicsRenderer::~GraphicsRenderer()
@@ -15,7 +16,7 @@ void GraphicsRenderer::print(std::string str)
 
   while (nl != std::string::npos)
   {
-    draw(str.substr(0, nl), _cursor.x, lineToY(_cursor.y));
+    draw(str.substr(0, nl-1), _cursor.x, lineToY(_cursor.y));
     lineBreak();
     str.erase(0, nl + 1);
     nl = str.find("\n");
@@ -36,7 +37,7 @@ void GraphicsRenderer::lineBreak()
 void GraphicsRenderer::clearScreen()
 {
   clear();
-  _cursor = Point(0, 0);
+  _cursor = _position;
 }
 
 int GraphicsRenderer::lineToY(int line)
