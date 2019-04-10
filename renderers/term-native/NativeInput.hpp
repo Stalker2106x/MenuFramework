@@ -101,7 +101,7 @@ public:
     fd_set fds;
     FD_ZERO(&fds);
     FD_SET(STDIN_FILENO, &fds);
-    if (select(4, &fds, NULL, NULL, &timeout)) > 0)
+    if (select(4, &fds, NULL, NULL, &timeout) > 0)
     {
         read(STDIN_FILENO, &buffer, 4);
         switch (buffer)
