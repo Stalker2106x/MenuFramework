@@ -1,8 +1,13 @@
 #include "MenuFramework.hpp"
-#include <string>
+#include "term-native/NativeInput.hpp"
+#include "term-native/NativeRenderer.hpp"
 
 int main(int argc, char **argv)
 {
+	Localization::langLocation = "../test/";
+	Localization::load("en-US");
+	Menu::setRenderer(std::make_shared<NativeRenderer>());
+	Menu::setInputManager(std::make_shared<NativeInput>());
 	std::string menuDocument = "<Menu OnLoad='InitScript'>"
 														 " <Text>Menu Example</Text>"
 														 " <Sep/>"
@@ -24,7 +29,13 @@ int main(int argc, char **argv)
 														 "   addMenuItem(0, \"<Text>This is the new title</Text>\")"
 														 "]]></Script>";
   Menu::goTo("", menuDocument, DataSource::Document);
+	//Menu::active->setClickCallback([](std::shared_ptr<MenuItem> it) { });
   Menu::run();
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+  //Menu::popUp("", menuDocument, DataSource::Document);
+	//std::this_thread::sleep_for(std::chrono::seconds(1));
+  //Menu::goTo("Test", "./menu.xml");
+	//std::this_thread::sleep_for(std::chrono::seconds(1));
 	Menu::quit();
   return (0);
 }

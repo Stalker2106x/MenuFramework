@@ -8,6 +8,7 @@
 #elif defined(__GNUC__) && !defined(__MINGW32__)
     #include <termios.h>
     #include <unistd.h>
+    #include <sys/select.h>
     #define KEY_LEFT    75
     #define KEY_RIGHT   77
     #define KEY_UP      72
@@ -39,8 +40,9 @@ public:
       HANDLE hStdIn = GetStdHandle(STD_INPUT_HANDLE);
       DWORD Events = 0;     // Event count
       DWORD EventsRead = 0; // Events read from console
+      char timerout = 0;
 
-      while (Events == 0)
+      while (Events == 0 && timerout < 3)
       {
           GetNumberOfConsoleInputEvents(hStdIn, &Events);
           if (Events != 0)
@@ -86,12 +88,22 @@ public:
               }
               delete[] eventBuffer;
           }
+          else
+          {
+              std::this_thread::sleep_for(std::chrono::seconds(1));
+              timerout++;
+          }
       }
 #elif defined(__GNUC__) && !defined(__MINGW32__)
     int buffer;
 
-    if (read(STDIN_FILENO, &buffer, 4) > 0)
+    struct timeval timeout = {3, 0};
+    fd_set fds;
+    FD_ZERO(&fds);
+    FD_SET(STDIN_FILENO, &fds);
+    if (select(4, &fds, NULL, NULL, &timeout)) > 0)
     {
+        read(STDIN_FILENO, &buffer, 4);
         switch (buffer)
         {
         case KEY_LEFT:

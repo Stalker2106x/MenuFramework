@@ -1,0 +1,5 @@
+<Menu Id="Test">
+ <Text>Menu Example</Text>
+ <Sep/>
+ <Button Type='Intern' Target=''>ButtonTest</Button>
+</Menu>

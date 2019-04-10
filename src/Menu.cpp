@@ -8,6 +8,7 @@
 
 //Menu
 
+std::mutex Menu::_mtx;
 std::shared_ptr<Menu> Menu::active = nullptr;
 std::shared_ptr<MenuFile> Menu::activeDoc = nullptr;
 std::unique_ptr<std::thread> Menu::_instance = nullptr;
@@ -59,6 +60,8 @@ void Menu::quit()
 
 void Menu::unload()
 {
+	std::lock_guard<std::mutex> lock(_mtx);
+
 	Menu::active = nullptr;
 	Menu::activeDoc = nullptr;
 	Menu::_renderer = nullptr;
@@ -154,12 +157,17 @@ void Menu::run()
 	_instance = std::make_unique<std::thread>([=] () {
 		while (!_quit)
 		{
-			active->render();
-			while (!active->update())
+			std::shared_ptr<Menu> activeMenu;
 			{
-				if (active->_clickCallback != nullptr)
+				std::lock_guard<std::mutex> lock(_mtx);
+			 	activeMenu = active;
+			}
+			activeMenu->render();
+			if (activeMenu->update())
+			{
+				if (activeMenu->_clickCallback != nullptr)
 				{
-					(*active->_clickCallback)(active->getHoveredItem());
+					(*activeMenu->_clickCallback)(active->getHoveredItem());
 				}
 			}
 		}
