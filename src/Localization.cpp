@@ -57,7 +57,7 @@ std::string Localization::substitute(xml_node data)
 
 void Localization::load(std::string langCode)
 {
-  DataFile langFile("./Data/Localization/"+langCode+".json");
+  DataFile langFile(langLocation+langCode+".json");
   json lang;
 
   if (!langFile.load()) throw (std::runtime_error("Error on lang loading"));
