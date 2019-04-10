@@ -22,10 +22,10 @@ int main(int argc, char **argv)
 														 "	 getSelectValue(\"SelectTest\")"
 														 "	 setSelectValue(\"SelectTest\", \"2\")"
 														 "   addMenuItem(0, \"<Text>This is the new title</Text>\")"
-														 "   exit()"
 														 "]]></Script>";
   Menu::goTo("", menuDocument, DataSource::Document);
   Menu::run();
+	while (true);
   Menu::unload();
   return (0);
 }

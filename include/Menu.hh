@@ -6,7 +6,7 @@
 #include <deque>
 #include <map>
 #include <memory>
-//#include <thread>
+#include <thread>
 #include <functional>
 #include "export.h"
 #include "GraphicsRenderer.hh"
@@ -41,7 +41,7 @@ public:
   static std::shared_ptr<MenuFile> activeDoc;
 
 private:
-  //static std::unique_ptr<std::thread> _instance;
+  static std::unique_ptr<std::thread> _instance;
   static std::shared_ptr<GraphicsRenderer> _renderer;
   static std::shared_ptr<InputManager> _inputmgr;
 

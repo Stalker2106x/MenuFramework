@@ -10,7 +10,7 @@
 
 std::shared_ptr<Menu> Menu::active = nullptr;
 std::shared_ptr<MenuFile> Menu::activeDoc = nullptr;
-//std::unique_ptr<std::thread> Menu::_instance = nullptr;
+std::unique_ptr<std::thread> Menu::_instance = nullptr;
 std::shared_ptr<GraphicsRenderer> Menu::_renderer = std::make_shared<NativeRenderer>();
 std::shared_ptr<InputManager> Menu::_inputmgr = std::make_shared<NativeInput>();
 bool Menu::quit = false;
@@ -149,19 +149,19 @@ void Menu::render()
 
 void Menu::run()
 {
-	//_instance = std::make_unique<std::thread>([=] () {
-	while (!quit)
-	{
-		active->render();
-		while (!active->update())
+	_instance = std::make_unique<std::thread>([=] () {
+		while (!quit)
 		{
-			if (active->_clickCallback != nullptr)
+			active->render();
+			while (!active->update())
 			{
-				(*active->_clickCallback)(active->getHoveredItem());
+				if (active->_clickCallback != nullptr)
+				{
+					(*active->_clickCallback)(active->getHoveredItem());
+				}
 			}
 		}
-	}
-	//});
+	});
 }
 
 std::shared_ptr<MenuItem> Menu::getHoveredItem()

@@ -36,7 +36,12 @@ source_group("LUA" FILES ${LuaSrc})
 
 # Library CXX/Linker
 
-add_library(MenuFramework STATIC ${MenuFrameworkInclude} ${MenuFrameworkSrc} ${MenuFrameworkRenderers} ${PugiXMLSrc} ${LuaSrc})
+find_package(Threads REQUIRED)
+
+add_library(${PROJECT_NAME} STATIC ${MenuFrameworkInclude} ${MenuFrameworkSrc} ${MenuFrameworkRenderers} ${PugiXMLSrc} ${LuaSrc})
+
+set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+target_link_libraries(${PROJECT_NAME} Threads::Threads)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
 PUBLIC_HEADER include/MenuFramework.hpp
