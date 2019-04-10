@@ -13,7 +13,7 @@ std::shared_ptr<MenuFile> Menu::activeDoc = nullptr;
 std::unique_ptr<std::thread> Menu::_instance = nullptr;
 std::shared_ptr<GraphicsRenderer> Menu::_renderer = std::make_shared<NativeRenderer>();
 std::shared_ptr<InputManager> Menu::_inputmgr = std::make_shared<NativeInput>();
-bool Menu::quit = false;
+bool Menu::_quit = false;
 
 Menu::Menu(const std::string &id)
  : _id(id), _lastInput(InputManager::Keys::None), _clickCallback(nullptr)
@@ -50,6 +50,13 @@ void Menu::selectCursor()
 	(*active->_selection)->select(_inputmgr, _renderer);
 }
 
+void Menu::quit()
+{
+	Menu::_quit = true;
+	Menu::_instance->join();
+	Menu::_instance = nullptr;
+}
+
 void Menu::unload()
 {
 	Menu::active = nullptr;
@@ -61,11 +68,6 @@ void Menu::unload()
 void Menu::onLoad()
 {
 	if (!_onLoadScript.empty()) ScriptEngine::runScript(_onLoadScript);
-}
-
-void Menu::setActiveDocument(const std::string &source, const DataSource sourceMode)
-{
-	setActiveDocument(std::make_shared<MenuFile>(source, sourceMode));
 }
 
 void Menu::setActiveDocument(std::shared_ptr<MenuFile> doc)
@@ -150,7 +152,7 @@ void Menu::render()
 void Menu::run()
 {
 	_instance = std::make_unique<std::thread>([=] () {
-		while (!quit)
+		while (!_quit)
 		{
 			active->render();
 			while (!active->update())
@@ -161,6 +163,7 @@ void Menu::run()
 				}
 			}
 		}
+		unload();
 	});
 }
 
@@ -206,7 +209,7 @@ void Menu::clearAlerts()
 
 void Menu::goTo(std::string id, std::string source, const DataSource dataMode)
 {
-	if (source != "") setActiveDocument(source, dataMode);
+	if (source != "") setActiveDocument(std::make_shared<MenuFile>(source, dataMode));
 	active = std::make_shared<Menu>(Menu(id));
 	active->onLoad();
 }

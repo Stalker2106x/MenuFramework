@@ -6,6 +6,7 @@
 #include <deque>
 #include <map>
 #include <memory>
+#include <mutex>
 #include <thread>
 #include <functional>
 #include "export.h"
@@ -27,20 +28,22 @@ public:
 
   static void alert(std::string str);
 
-  static void setActiveDocument(const std::string &source, const DataSource sourceMode);
   static void setActiveDocument(std::shared_ptr<MenuFile> doc);
 
   static void goTo(std::string id, std::string source = "", DataSource sourceMode = DataSource::Filesystem);
   static void popUp(std::string id, std::string source = "", DataSource sourceMode = DataSource::Filesystem);
+  
+  static void quit();
   static void run();
 
   static void selectCursor();
 
-  static bool quit;
   static std::shared_ptr<Menu> active;
   static std::shared_ptr<MenuFile> activeDoc;
 
 private:
+  static bool _quit;
+  static std::mutex _mtx;
   static std::unique_ptr<std::thread> _instance;
   static std::shared_ptr<GraphicsRenderer> _renderer;
   static std::shared_ptr<InputManager> _inputmgr;

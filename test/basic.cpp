@@ -25,7 +25,6 @@ int main(int argc, char **argv)
 														 "]]></Script>";
   Menu::goTo("", menuDocument, DataSource::Document);
   Menu::run();
-	while (true);
-  Menu::unload();
+	Menu::quit();
   return (0);
 }

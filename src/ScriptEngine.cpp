@@ -45,7 +45,7 @@ void ScriptEngine::exposeCpp()
   scriptEnv.set_function("toint", [=] (std::string str) { return (atoi(str.c_str())); });
   //scriptEnv.set_function("clearScreen", [] () { (*Menu::renderer).clearScreen(); });
   //scriptEnv.set_function("pause", [] () { getch(); });
-  scriptEnv.set_function("exit", [] () { Menu::quit = true; });
+  scriptEnv.set_function("exit", [] () { Menu::quit(); });
   scriptEnv.set_function("alert", [=] (std::string msg) { Menu::alert(msg); });
   scriptEnv.set_function("goTo", [=] (std::string id) { Menu::goTo(id); });
   scriptEnv.set_function("goToPath", [=] (std::string id, std::string path) { Menu::goTo(id, path); });
@@ -56,9 +56,9 @@ void ScriptEngine::exposeCpp()
     MenuFile menu(xml, DataSource::Document);
 
     if (!menu.load()) Menu::alert("Invalid XML injection");
-	Menu::active->getHoveredItem()->toggleHover(); //Unselect current
+	  Menu::active->getHoveredItem()->toggleHover(); //Unselect current
     Menu::active->addItem(menu.getData().first_child(), idx);
-	Menu::active->resetCursor(); //Cursor invalidated
+	  Menu::active->resetCursor(); //Cursor invalidated
   });
   scriptEnv.set_function("getCursor", [] () { return (Menu::active->getCursor()); });
   scriptEnv.set_function("getInputData", [=] (std::string id) {
