@@ -12,24 +12,25 @@
 ## About
 
 MenuFramework is a rich extendable XML menu engine with LUA integrated script engine (C++ exposition capabilities)
-It gives an easy way to add interactive interfaces to your program without hassle
+It gives an easy way to add interactive interfaces to your program without hassle.
 Code is cross-platform, tested and compiled on Windows, Linux and MacOS !
 
 ![](/test/demo.gif)
 
 ### Contributors
 
-	- Stabax
-	- Stalker2106
+*   Stabax
+*   Stalker2106
 
 ## How to Build
 
 ### Dependencies
 
-	- Nlhomann's json
-	- Pugixml
-	- Lua
-	- Sol2
+*   CMake
+*   Nlhomann's json
+*   Pugixml
+*   Lua
+*   Sol2
 
 You need to grab dependencies if they are not installed on your machine (which is probably the case),
 you can do so with the following command-line:
