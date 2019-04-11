@@ -11,25 +11,25 @@
 
 ## About
 
-MenuFramework is a rich extendable XML menu engine with LUA integrated script engine (C++ exposition capabilities)
-It gives an easy way to add interactive interfaces to your program without hassle
-Code is cross-platform, tested and compiled on Windows, Linux and MacOS !
+MenuFramework is a rich extendable XML menu engine with an integrated LUA script engine (incl. C++ exposition capabilities).
+It gives an easy way to add interactive interfaces to your program without hassle.
+Code is cross-platform, tested and compiled on Windows, Linux and MacOS!
 
 ![](/test/demo.gif)
 
 ### Contributors
 
-	- Stabax
-	- Stalker2106
+ * Stabax
+ * Stalker2106
 
 ## How to Build
 
 ### Dependencies
 
-	- Nlhomann's json
-	- Pugixml
-	- Lua
-	- Sol2
+ * Nlhomann's json
+ * Pugixml
+ * Lua
+ * Sol2
 
 You need to grab dependencies if they are not installed on your machine (which is probably the case),
 you can do so with the following command-line:
@@ -37,7 +37,7 @@ you can do so with the following command-line:
     git submodule update --init --recursive
 
 The project itself is based on CMake, which means you have to generate the build tools for it.
-You can generate Makefiles, Visual studio solutions, etc with the following commands (when at repository root)
+You can generate Makefiles, Visual studio solutions, etc. with the following commands (when at repository root)
 
     mkdir build && cd build
     cmake ..
@@ -49,10 +49,10 @@ The library has been tested on *C++14* compliant *MinGW, GCC, and MSBuild*.
 
 ### Getting started
 
-The menu framework is component-driven, the core components are the GraphicsRenderer, and the InputManager.
+MenuFramework is component-driven, the core components are `GraphicsRenderer`, and `InputManager`.
 They allow to use any rendering system to render Menus, and any user input mechanism to interact with user interface.
 
-Menu framework uses a specific XML markup for menu, which can be supplied either through C++ Strings, or Filesystem.
+MenuFramework uses a specific XML markup for menu, which can be supplied either through C++ Strings, or Filesystem.
 A basic example of a program that shows a menu is the following:
 
  	  std::string menuDocument;
@@ -66,13 +66,13 @@ A basic example of a program that shows a menu is the following:
     Menu::goTo("", menuDocument, DataSource::Document);
     Menu::run();
 
-By default, the framework uses a NativeRenderer and NativeInput, which uses respectively system standard output and input (raw mode).
-If you want, you can provide implementation for both of them through the following methods:
+By default, the framework uses `NativeRenderer` and `NativeInput`, which respectively uses system standard output and input (raw mode).
+If you want, you can provide implementations for both of them through the following methods:
 
     static void Menu::setRenderer(std::shared_ptr<GraphicsRenderer> renderer);
     static void Menu::setInputManager(std::shared_ptr<InputManager> inputmgr);
 
-To do so, just create your own renderer and inputmanager, inherit from GraphicsRenderer and InputManager classes, and implement pure virtual functions. Examples can be found [here](renderers/)
+To do so, just create your own renderer and inputmanager, inherit from `GraphicsRenderer` and `InputManager` classes, and implement pure virtual functions. Examples can be found [here](renderers/)
 
 ### Menu XML elements
 
@@ -175,7 +175,7 @@ This is an example of a basic menu:
       <Button Type='Intern' Target='alert("amazing")'>Print!</Button>
     </Menu>
 
-an advanced menu example :
+an advanced menu example:
 
     <Menu Id="NewGame">
       <Text>Game Creation Menu</Text>
@@ -270,11 +270,11 @@ Will output:
 
 ### Internationalization
 
-By default, the menu framework does not uses the "locale" system. You can load any locale when starting the program, using the static "load" function in localization where langCode is the locale JSON file name.
+By default, the menu framework does not uses the "locale" of the system. You can load any locale when starting the program, using the static "load" function in localization where langCode is the locale JSON file name.
 
     Localization::load("en-US"); //Loads english locale
 
-Now, the program will look inside the current working directory for a file named "./en-US.json", which will contains a JSON formatted translated units like so:
+Now, the program will look inside the current working directory for a file named `"./en-US.json"`, which contains a JSON formatted translated units like so:
 
     {
       "localization": "English",
@@ -287,7 +287,7 @@ You can change the folder where the localization looks for by altering the follo
 
     Localization::langLocation = "./my/localization/folder/";
 
-You can insert "Localized" string in your menus through the "Lang" XML element, which will load the corresponding text with Id in the locale file. For example, the following menu will show the previous "any.key" defined unit.
+You can insert "Localized" string in your menus through the "Lang" XML element, which will load the corresponding text with `Id` in the locale file. For example, the following menu will show the previous "any.key" defined unit.
 
     <Menu>
       <Lang Id="any.key">
