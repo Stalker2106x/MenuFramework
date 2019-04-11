@@ -131,13 +131,13 @@ MenuInput::MenuInput(const xml_node &data)
 
 void MenuInput::select(std::shared_ptr<InputManager> inputmgr, std::shared_ptr<GraphicsRenderer> renderer)
 {
-  int input;
+  Key input;
 
   Menu::active->render(); //Render once
-  while ((input = inputmgr->getInput()) != InputManager::Keys::Enter)
+  while ((input = inputmgr->getInput()).code != Key::Code::Enter)
   {
-    if (_data.length() > 0 && (input == InputManager::Keys::Backspace)) _data.erase(--_data.end());
-    else _data += input;
+    if (_data.length() > 0 && (input.code == Key::Code::Backspace)) _data.erase(--_data.end());
+    else _data += input.value;
     renderer->clearScreen();
     Menu::active->render(); //Request render to update input
   }
@@ -175,13 +175,13 @@ MenuSelect::MenuSelect(const xml_node &data)
 
 void MenuSelect::select(std::shared_ptr<InputManager> inputmgr, std::shared_ptr<GraphicsRenderer> renderer)
 {
-  int input;
+  Key::Code input;
 
   Menu::active->render(); //Render once
-  while ((input = inputmgr->getInput()) != InputManager::Keys::Enter)
+  while ((input = inputmgr->getInput().code) != Key::Code::Enter)
   {
-    if (input == InputManager::Keys::Left) --_cursor;
-    else if (input == InputManager::Keys::Right) ++_cursor;
+    if (input == Key::Code::Left) --_cursor;
+    else if (input == Key::Code::Right) ++_cursor;
     if (_cursor < 0) _cursor = _values.size()-1;
     if (static_cast<size_t>(_cursor) >= _values.size()) _cursor = 0;
     renderer->clearScreen();

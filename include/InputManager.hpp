@@ -3,10 +3,8 @@
 
 #include "export.h"
 
-class MF_API InputManager
-{
-public:
-  enum Keys {
+struct MF_API Key {
+  enum Code {
     None = -1,
     Up,
     Left,
@@ -14,13 +12,27 @@ public:
     Down,
     Enter,
     Backspace,
+    ASCII,
     F11
   };
+
+  Key(Code c = Code::None)
+  : code(c)
+  {
+  }
+
+  Code code;
+  char value;
+};
+
+class MF_API InputManager
+{
+public:
 
   InputManager() {};
   virtual ~InputManager() {};
 
-  virtual Keys getInput() = 0;
+  virtual Key getInput() = 0;
 
 protected:
 

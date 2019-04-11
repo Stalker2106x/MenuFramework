@@ -34,7 +34,7 @@ public:
   {
   }
 
-  InputManager::Keys getInput()
+  Key getInput()
   {
 #if defined(_MSC_VER) || defined(__MINGW32__)
       HANDLE hStdIn = GetStdHandle(STD_INPUT_HANDLE);
@@ -47,7 +47,7 @@ public:
           GetNumberOfConsoleInputEvents(hStdIn, &Events);
           if (Events != 0)
           {
-              InputManager::Keys key;
+              Key key;
               INPUT_RECORD *eventBuffer = new INPUT_RECORD[Events];
 
               ReadConsoleInput(hStdIn, eventBuffer, Events, &EventsRead);
@@ -58,28 +58,38 @@ public:
                       switch (eventBuffer[i].Event.KeyEvent.wVirtualKeyCode)
                       {
                       case VK_LEFT:
-                          key = InputManager::Keys::Left;
+                          key.code = Key::Code::Left;
 						  break;
                       case VK_RIGHT:
-                          key = InputManager::Keys::Right;
+                          key.code = Key::Code::Right;
 						  break;
                       case VK_UP:
-                          key = InputManager::Keys::Up;
+                          key.code = Key::Code::Up;
 						  break;
                       case VK_DOWN:
-                          key = InputManager::Keys::Down;
+                          key.code = Key::Code::Down;
 						  break;
                       case VK_RETURN:
-                          key = InputManager::Keys::Enter;
+                          key.code = Key::Code::Enter;
 						  break;
-                      case VK_DELETE:
-                          key = InputManager::Keys::Backspace;
+                      case VK_BACK:
+                          key.code = Key::Code::Backspace;
 						  break;
                       default:
-                          key = InputManager::Keys::None;
+                          key.code = Key::Code::None;
 						  break;
                       }
-                      if (key != InputManager::Keys::None)
+                      if (key.code == Key::Code::None
+                          && ((eventBuffer[i].Event.KeyEvent.wVirtualKeyCode >= 'A'
+                               &&  eventBuffer[i].Event.KeyEvent.wVirtualKeyCode <= 'Z')
+                              || (eventBuffer[i].Event.KeyEvent.wVirtualKeyCode >= '0'
+                               &&  eventBuffer[i].Event.KeyEvent.wVirtualKeyCode <= '9')
+                              || (eventBuffer[i].Event.KeyEvent.wVirtualKeyCode == VK_SPACE)))
+                      {
+                        key.code = Key::Code::ASCII;
+                        key.value = eventBuffer[i].Event.KeyEvent.wVirtualKeyCode;
+                      }
+                      if (key.code != Key::Code::None)
                       {
                           delete[] eventBuffer;
                           return (key);
@@ -106,22 +116,22 @@ public:
         switch (buffer)
         {
         case KEY_LEFT:
-            return (InputManager::Keys::Left);
+            return (Key::Code::Left);
         case KEY_RIGHT:
-            return (InputManager::Keys::Right);
+            return (Key::Code::Right);
         case KEY_UP:
-            return (InputManager::Keys::Up);
+            return (Key::Code::Up);
         case KEY_DOWN:
-            return (InputManager::Keys::Down);
+            return (Key::Code::Down);
         case '\n':
         case '\r':
-            return (InputManager::Keys::Enter);
+            return (Key::Code::Enter);
         case '\b':
-            return (InputManager::Keys::Backspace);
+            return (Key::Code::Backspace);
         }
     }
 #endif
-      return (InputManager::Keys::None);
+      return (Key::Code::None);
   }
 
 };

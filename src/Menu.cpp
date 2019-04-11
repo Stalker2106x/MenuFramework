@@ -17,7 +17,7 @@ std::shared_ptr<InputManager> Menu::_inputmgr = std::make_shared<NativeInput>();
 bool Menu::_quit = false;
 
 Menu::Menu(const std::string &id)
- : _id(id), _lastInput(InputManager::Keys::None), _clickCallback(nullptr)
+ : _id(id), _lastInput(Key::Code::None), _clickCallback(nullptr)
 {
 	xml_node menu;
 
@@ -87,12 +87,12 @@ void Menu::setClickCallback(std::function<void(std::shared_ptr<MenuItem>)> callb
 
 bool Menu::update()
 {
-	InputManager::Keys input = _inputmgr->getInput();
+	Key input = _inputmgr->getInput();
 
-	if(input == InputManager::Keys::Up) updateCursor(false);
-	else if(input == InputManager::Keys::Down) updateCursor(true);
-	else if(input == InputManager::Keys::Enter) (*_selection)->select(_inputmgr, _renderer);
-	else if (input == InputManager::Keys::F11) ScriptEngine::console(*this, _inputmgr, _renderer);
+	if(input.code == Key::Code::Up) updateCursor(false);
+	else if(input.code == Key::Code::Down) updateCursor(true);
+	else if(input.code == Key::Code::Enter) (*_selection)->select(_inputmgr, _renderer);
+	else if (input.code == Key::Code::F11) ScriptEngine::console(*this, _inputmgr, _renderer);
 	else return (false);
 	return (true);
 }
@@ -231,7 +231,7 @@ void Menu::popUp(std::string id, std::string source, const DataSource dataMode)
 	{
 		active->render();
 		active->update();
-		if(active->_lastInput == InputManager::Keys::Enter) break;
+		if(active->_lastInput.code == Key::Code::Enter) break;
 	};
 	if (active->_clickCallback != nullptr)
 	{

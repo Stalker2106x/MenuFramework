@@ -71,7 +71,7 @@ public:
 
 private:
   std::string _id;
-  InputManager::Keys _lastInput;
+  Key _lastInput;
   std::vector<std::shared_ptr<MenuItem>>::const_iterator _selection;
   std::shared_ptr<std::function<void(std::shared_ptr<MenuItem>)>> _clickCallback;
   std::string _onLoadScript;

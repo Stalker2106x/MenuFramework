@@ -93,19 +93,19 @@ void ScriptEngine::loadScripts(const xml_document &doc)
 
 void ScriptEngine::console(Menu &currentMenu, std::shared_ptr<InputManager> inputmgr, std::shared_ptr<GraphicsRenderer> renderer)
 {
-  int input;
+  Key::Code input;
   std::string command;
 
   currentMenu.renderConsole(command); //Renders console
-  while ((input = inputmgr->getInput()) != InputManager::Keys::F11)
+  while ((input = inputmgr->getInput().code) != Key::Code::F11)
   {
     renderer->clearScreen();
-    if (input == InputManager::Keys::Enter)
+    if (input == Key::Code::Enter)
     {
       run(command);
       command.clear();
     }
-    else if (command.length() > 0 && (input == InputManager::Keys::Backspace)) command.erase(--command.end());
+    else if (command.length() > 0 && (input == Key::Code::Backspace)) command.erase(--command.end());
     else command += input;
     currentMenu.renderConsole(command);
   }
