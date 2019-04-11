@@ -8,20 +8,6 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
 
-
-# Project
-
-file(GLOB MenuFrameworkInclude
-    "include/*.hpp"
-    "include/*.hh")
-file(GLOB MenuFrameworkSrc
-    "src/*.cpp")
-file(GLOB MenuFrameworkRenderers
-    "renderers/*/*.hpp"
-    "renderers/*/*.cpp")
-source_group("Renderers" FILES ${MenuFrameworkRenderers})
-
-
 # PugiXML Dependency
 
 file(GLOB PugiXMLSrc "thirdparty/pugixml/src/*.cpp")
@@ -34,9 +20,19 @@ file(GLOB LuaSrc "thirdparty/lua/src/*.c")
 source_group("LUA" FILES ${LuaSrc})
 
 
-# Library CXX/Linker
+# MenuFramework Library
 
 find_package(Threads REQUIRED)
+
+file(GLOB MenuFrameworkInclude
+    "include/*.hpp"
+    "include/*.hh")
+file(GLOB MenuFrameworkSrc
+    "src/*.cpp")
+file(GLOB MenuFrameworkRenderers
+    "renderers/*/*.hpp"
+    "renderers/*/*.cpp")
+source_group("Renderers" FILES ${MenuFrameworkRenderers})
 
 add_library(${PROJECT_NAME} STATIC ${MenuFrameworkInclude} ${MenuFrameworkSrc} ${MenuFrameworkRenderers} ${PugiXMLSrc} ${LuaSrc})
 
@@ -50,18 +46,26 @@ LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 
 set_source_files_properties(${LuaSrc} PROPERTIES LANGUAGE CXX)
 
-# Unit Tests
+# Auto Unit Test binary
 
-file(GLOB TestSrc "test/*.cpp")
-
-
-# Test CXX/Linker
+file(GLOB TestSrc "test/auto.cpp")
 
 add_executable(${PROJECT_NAME}_test ${TestSrc})
 
 target_link_libraries(${PROJECT_NAME}_test ${PROJECT_NAME})
 
 set_target_properties(${PROJECT_NAME}_test PROPERTIES
+RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
+
+# Examples binary
+
+file(GLOB ExampleSrc "test/example.cpp")
+
+add_executable(${PROJECT_NAME}_example ${ExampleSrc})
+
+target_link_libraries(${PROJECT_NAME}_example ${PROJECT_NAME})
+
+set_target_properties(${PROJECT_NAME}_example PROPERTIES
 RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 
 # Continuous integration

@@ -40,9 +40,9 @@ public:
       HANDLE hStdIn = GetStdHandle(STD_INPUT_HANDLE);
       DWORD Events = 0;     // Event count
       DWORD EventsRead = 0; // Events read from console
-      char timerout = 0;
+      DWORD timeoutTick = GetTickCount() + 3000;
 
-      while (Events == 0 && timerout < 3)
+      while (GetTickCount() < timeoutTick)
       {
           GetNumberOfConsoleInputEvents(hStdIn, &Events);
           if (Events != 0)
@@ -90,8 +90,7 @@ public:
           }
           else
           {
-              std::this_thread::sleep_for(std::chrono::seconds(1));
-              timerout++;
+            Sleep(50);
           }
       }
 #elif defined(__GNUC__) && !defined(__MINGW32__)
