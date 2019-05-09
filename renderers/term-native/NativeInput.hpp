@@ -5,7 +5,7 @@
 #include "InputManager.hpp"
 #if defined(_MSC_VER) || defined(__MINGW32__)
     #include <windows.h>
-#elif defined(__GNUC__) && !defined(__MINGW32__)
+#elif (defined(__GNUC__) && !defined(__MINGW32__)) || defined(__clang__)
     #include <termios.h>
     #include <unistd.h>
     #include <sys/select.h>
@@ -22,7 +22,7 @@ public:
     NativeInput()
   : InputManager()
   {
-#if defined(__GNUC__) && !defined(__MINGW32__)
+#if (defined(__GNUC__) && !defined(__MINGW32__)) || defined(__clang__)
     struct termios raw;
     tcgetattr(STDIN_FILENO, &raw);
     raw.c_lflag &= ~(ECHO);
@@ -103,8 +103,9 @@ public:
             Sleep(50);
           }
       }
-#elif defined(__GNUC__) && !defined(__MINGW32__)
-    int buffer;
+#elif (defined(__GNUC__) && !defined(__MINGW32__)) || defined(__clang__)
+    int buffer = 0;
+    Key key;
 
     struct timeval timeout = {3, 0};
     fd_set fds;
@@ -116,19 +117,40 @@ public:
         switch (buffer)
         {
         case KEY_LEFT:
-            return (Key::Code::Left);
+            key.code = Key::Code::Left;
+            break;
         case KEY_RIGHT:
-            return (Key::Code::Right);
+            key.code = Key::Code::Right;
+            break;
         case KEY_UP:
-            return (Key::Code::Up);
+            key.code = Key::Code::Up;
+            break;
         case KEY_DOWN:
-            return (Key::Code::Down);
+            key.code = Key::Code::Down;
+            break;
         case '\n':
         case '\r':
-            return (Key::Code::Enter);
+            key.code = Key::Code::Enter;
+            break;
         case '\b':
-            return (Key::Code::Backspace);
+            key.code = Key::Code::Backspace;
+            break;
+        default:
+            key.code = Key::Code::None;
+            break;
         }
+        if (key.code == Key::Code::None
+            && ((buffer >= 'A' &&  buffer <= 'Z')
+                || (buffer >= '0' &&  buffer <= '9')
+                || (buffer == ' ')))
+        {
+            key.code = Key::Code::ASCII;
+            key.value = buffer;
+        }
+    }
+    if (key.code != Key::Code::None)
+    {
+        return (key);
     }
 #endif
       return (Key::Code::None);
