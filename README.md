@@ -56,9 +56,7 @@ They allow to use any rendering system to render Menus, and any user input mecha
 Menu framework uses a specific XML markup for menu, which can be supplied either through C++ Strings, or Filesystem.
 A basic example of a program that shows a menu is the following:
 
- 	  std::string menuDocument;
-    
-	  menuDocument += "<Menu>"
+ 	  std::string menuDocument = "<Menu>"
                     " <Text>Menu Example</Text>"
                     " <Sep/>"
                     " <Button Type='Intern' Target='alert(\"Stop pressing me!\")'>Press me!</Button>"
@@ -111,7 +109,7 @@ All of the following tag/attributes are writable in MenuFramework markup, and wi
   <!-- Lang -->
   <tr>
     <td rowspan="1">Lang</td>
-    <td colspan="2">Load lang unit with same Id from locale file</td>
+    <td colspan="2">Substitutes the whole tag with the corresponding lang unit from locale file (Matching Ids)</td>
   </tr>
   <!-- Sep -->
   <tr>
@@ -168,7 +166,7 @@ All of the following tag/attributes are writable in MenuFramework markup, and wi
 
 ### Examples
 
-This is an example of a basic menu:
+This is an example of a basic menu that has a button "Print!" which when pressed trigger an alert saying "amazing":
 
     <Menu Id="ExampleMenu">
       <Text>Example label</Text>
@@ -176,7 +174,7 @@ This is an example of a basic menu:
       <Button Type='Intern' Target='alert("amazing")'>Print!</Button>
     </Menu>
 
-an advanced menu example :
+an advanced menu example that shows text, two dropdowns with values using localization, buttons, alerts... :
 
     <Menu Id="NewGame">
       <Text>Game Creation Menu</Text>
@@ -199,7 +197,7 @@ You may want to have custom behaviour inside your menus, thats why the framework
 
 ### Script C++ Binding
 
-If you need helper lua functions, the following are implemented:
+If you need to access/alter menu, or manipulate back-end data,  the following lua functions are implemented and callable in any script:
 
 <table style="width:100%;">
   <tr>
@@ -243,7 +241,7 @@ If you need helper lua functions, the following are implemented:
 
 ### Adding lua to your menus
 
-This is an example of a script that prints a menu that lists items and allows to select one:
+This is an example of a menu implementing a script that prints a menu that lists items and allows to select one:
 
     <Menu Id="Test" OnLoad="TestOnLoad">
       <Text>Select an item</Text>
@@ -288,7 +286,7 @@ You can change the folder where the localization looks for by altering the follo
 
     Localization::langLocation = "./my/localization/folder/";
 
-You can insert "Localized" string in your menus through the "Lang" XML element, which will load the corresponding text with Id in the locale file. For example, the following menu will show the previous "any.key" defined unit.
+You can insert "Localized" strings in your menus through the "Lang" XML element, which will be substitued by the corresponding text of lang Id in the locale file. If the langId has no translation, it will be shown as is. For example, the following menu will show the previous "any.key" defined unit.
 
     <Menu>
       <Lang Id="any.key">
