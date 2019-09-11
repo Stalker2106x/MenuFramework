@@ -37,6 +37,11 @@ void ScriptEngine::run(const std::string &script)
   }
 }
 
+void ScriptEngine::exposeFunction(const std::string &name, std::function<void(void)> fptr)
+{
+  scriptEnv.set_function(name, fptr);
+}
+
 void ScriptEngine::exposeCpp()
 {
   //General

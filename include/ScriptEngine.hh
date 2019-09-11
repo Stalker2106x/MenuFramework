@@ -24,6 +24,8 @@ struct MF_API ScriptEngine
 
   static void runScript(const std::string &scriptId);
   static void run(const std::string &script);
+
+  static void exposeFunction(const std::string &name, std::function<void(void)> fptr);
   static void exposeCpp();
 
   static void loadScripts(const xml_document &doc);
