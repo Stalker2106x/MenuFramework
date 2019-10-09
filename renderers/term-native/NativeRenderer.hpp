@@ -6,7 +6,6 @@
 	#include <windows.h>
 #elif defined(__GNUC__) && !defined(__MINGW32__)
     #include <unistd.h>
-    #include <term.h>
 #endif
 
 class NativeRenderer : public GraphicsRenderer

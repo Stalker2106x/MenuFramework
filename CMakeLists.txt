@@ -34,7 +34,7 @@ file(GLOB MenuFrameworkRenderers
     "renderers/*/*.cpp")
 source_group("Renderers" FILES ${MenuFrameworkRenderers})
 
-add_library(${PROJECT_NAME} STATIC ${MenuFrameworkInclude} ${MenuFrameworkSrc} ${MenuFrameworkRenderers} ${PugiXMLSrc} ${LuaSrc})
+add_library(${PROJECT_NAME} STATIC ${MenuFrameworkSrc} ${MenuFrameworkRenderers} ${PugiXMLSrc} ${LuaSrc})
 
 set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
 target_link_libraries(${PROJECT_NAME} Threads::Threads)
