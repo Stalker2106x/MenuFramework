@@ -9,10 +9,16 @@
     #include <termios.h>
     #include <unistd.h>
     #include <sys/select.h>
-    #define KEY_LEFT    75
-    #define KEY_RIGHT   77
-    #define KEY_UP      72
-    #define KEY_DOWN    80
+
+    #define KEY_UP 4283163
+    #define KEY_RIGHT 4414235
+    #define KEY_DOWN 4348699
+    #define KEY_LEFT 4479771
+    /* #define KEY_ARROW_MASK  0x3
+     * #define KEY_LEFT        75
+     * #define KEY_RIGHT       77
+     * #define KEY_UP          72
+     * #define KEY_DOWN        80 */
 #endif
 
 
@@ -23,15 +29,16 @@ public:
   : InputManager()
   {
 #if (defined(__GNUC__) && !defined(__MINGW32__)) || defined(__clang__)
-    struct termios raw;
-    tcgetattr(STDIN_FILENO, &raw);
-    raw.c_lflag &= ~(ECHO);
-    tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
+    tcgetattr(0, &termCfg); // grab old terminal i/o settings
+    struct termios raw = termCfg;
+    raw.c_lflag &= ~ICANON; /* disable buffered i/o */
+    tcsetattr(0, TCSANOW, &raw);
 #endif
   }
 
   ~NativeInput()
   {
+    tcsetattr(0, TCSANOW, &termCfg);
   }
 
   Key getInput()
@@ -142,10 +149,11 @@ public:
         if (key.code == Key::Code::None
             && ((buffer >= 'A' &&  buffer <= 'Z')
                 || (buffer >= '0' &&  buffer <= '9')
+                || (buffer >= 'a' &&  buffer <= 'z')
                 || (buffer == ' ')))
         {
             key.code = Key::Code::ASCII;
-            key.value = buffer;
+            key.value = (char)buffer;
         }
     }
     if (key.code != Key::Code::None)
@@ -153,9 +161,10 @@ public:
         return (key);
     }
 #endif
-      return (Key::Code::None);
+    return (Key::Code::None);
   }
-
+private:
+    struct termios termCfg;
 };
 
 #endif /* !NATIVEINPUT_HPP_ */
