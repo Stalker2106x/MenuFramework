@@ -18,8 +18,11 @@ class MF_API MenuItem
 {
 public:
   enum Type {
+    Unknown = 0,
     Button,
-    Input
+    Select,
+    Script,
+    Alert
   };
 
   MenuItem(const xml_node &data, bool selectable = false);
@@ -47,7 +50,7 @@ protected:
 class MenuButton : public MenuItem
 {
 public:
-  enum Type {
+  enum ActionType {
     Goto,
     Script,
     Intern,
@@ -59,7 +62,7 @@ public:
   void bind(std::function<void(void)> &callback);
 
 private:
-  Type _type;
+  ActionType _actionType;
   std::string _target, _path;
   std::function<void(void)> _cppCallback;
 };

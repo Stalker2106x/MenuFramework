@@ -90,15 +90,15 @@ void MenuItem::render(std::shared_ptr<GraphicsRenderer> renderer)
 MenuButton::MenuButton(const xml_node &data)
  : MenuItem(data, true), _target(data.attribute("Target").value()), _path(data.attribute("Path").value())
 {
-  if (strcmp(data.attribute("Type").value(), "Goto") == 0) _type = Goto;
-  else if (strcmp(data.attribute("Type").value(), "Script") == 0) _type = Script;
-  else if (strcmp(data.attribute("Type").value(), "Intern") == 0) _type = Intern;
+  if (strcmp(data.attribute("Type").value(), "Goto") == 0) _actionType = Goto;
+  else if (strcmp(data.attribute("Type").value(), "Script") == 0) _actionType = Script;
+  else if (strcmp(data.attribute("Type").value(), "Intern") == 0) _actionType = Intern;
   else throw (std::runtime_error("Unknown button type"));
 }
 
 void MenuButton::select(std::shared_ptr<InputManager> inputmgr, std::shared_ptr<GraphicsRenderer> renderer)
 {
-  switch (_type)
+  switch (_actionType)
   {
   case Goto:
     Menu::goTo(_target, _path);
@@ -117,7 +117,7 @@ void MenuButton::select(std::shared_ptr<InputManager> inputmgr, std::shared_ptr<
 
 void MenuButton::bind(std::function<void(void)> &callback)
 {
-  _type = Cpp;
+  _actionType = Cpp;
   _cppCallback = callback;
 }
 
