@@ -3,16 +3,39 @@
 
 #include "MenuItem.hh"
 
+/*
+ * Styling properties are defined as string key=value format, stored in map.
+ */
+typedef std::map<std::string, std::string> StyleUnit;
+
+/*
+ * Common styling key strings
+ */
+#define STYLE_TOP           "top"
+#define STYLE_LEFT          "left"
+#define STYLE_RIGHT         "right"
+#define STYLE_DOWN          "down"
+#define STYLE_CHAR          "char"
+#define STYLE_COUNT         "count"
+#define STYLE_MARGIN        "margin"
+#define STYLE_MARGIN_TOP    STYLE_MARGIN "-" STYLE_TOP
+#define STYLE_MARGIN_RIGHT  STYLE_MARGIN "-" STYLE_RIGHT
+#define STYLE_MARGIN_DOWN   STYLE_MARGIN "-" STYLE_DOWN
+#define STYLE_MARGIN_LEFT   STYLE_MARGIN "-" STYLE_LEFT
+
+/*
+ * This class holds style for every non alphanumeric char that is rendered
+ */
 class StyleSheet {
 public:
     StyleSheet();
 
     void setDefaults(bool clear = true);
     void load(const DataFile &source);
-    const std::string &operator[](MenuItem::Type type);
-    
+    const StyleUnit &operator[](MenuItem::Type type);
+
 protected:
-    std::map<size_t, std::string> _assocs;
+    std::map<size_t, StyleUnit> _assocs;
 };
 
 #endif /* !STYLESHEET_HH_ */

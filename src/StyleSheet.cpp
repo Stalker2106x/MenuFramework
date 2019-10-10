@@ -16,7 +16,7 @@ void load(const DataFile &source)
 
 }
 
-const std::string &StyleSheet::operator[](MenuItem::Type type)
+const StyleUnit &StyleSheet::operator[](MenuItem::Type type)
 {
     return (_assocs[type]);
 }
