@@ -17,6 +17,10 @@
 class MF_API MenuItem
 {
 public:
+
+  /*!
+  * @brief Holds all existing item types
+  */
   enum Type {
     Unknown = 0,
     Button,

@@ -6,7 +6,21 @@
 /*
  * Styling properties are defined as string key=value format, stored in map.
  */
-typedef std::map<std::string, std::string> StyleUnit;
+class StyleUnit
+{
+public:
+    StyleUnit();
+
+    const std::string &operator[](const std::string &key);
+
+    template <typename T>
+    const T &get(const std::string &key)
+    {
+        throw std::runtime_error("Not implemented");
+    }
+private:
+    std::map<std::string, std::string> _style;
+};
 
 /*
  * Common styling key strings
