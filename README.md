@@ -291,3 +291,62 @@ You can insert "Localized" strings in your menus through the "Lang" XML element,
     <Menu>
       <Lang Id="any.key">
     </Menu>
+
+### Styling
+
+MenuFramework is highly customizable, every item element comes with a default style applied, but the whole system allow stylesheets to override default styles. These stylesheets are written in json, but use more or less CSS syntax. For instance, this is a valid stylesheet:
+
+    {
+        "Text": {
+            "margin-left": 10
+        },
+        "Separator": {
+            "string": "-=-=-",
+            "margin-top": 1,
+            "margin-down": 1
+        }
+    }
+
+Styling attributes are grouped by Item, and are extendable, which means you can add your own as long as you handle them inside the renderer or through lua scripts.
+Any MenuItem can be overriden, just type their name as defined here.
+The following table shows the existing rules for styling:
+
+<table style="width:100%;">
+  <tr>
+    <th>Rule</th>
+    <th>Value</th>
+    <th>Description</th>
+  </tr>
+  <!-- Generic -->
+  <tr>
+    <td>color</td>
+    <td>#FFFFFF</td>
+    <td>set foreground (text) color of item</td>
+  </tr>
+  <tr>
+  <tr>
+    <td>bgcolor</td>
+    <td>#00FF00</td>
+    <td>set background color of item</td>
+  </tr>
+  <tr>
+    <td>string</td>
+    <td>"-=-"</td>
+    <td>set the character or string to be rendered for this item</td>
+  </tr>
+  <tr>
+    <td>
+    margin-left
+    margin-top
+    margin-right
+    margin-down
+    </td>
+    <td>5</td>
+    <td>adds spaces for horizontal spacing, and lines to vertical</td>
+  </tr>
+  <tr>
+    <td>spacing</td>
+    <td>2</td>
+    <td>set the spacing (in space chars) between the label and the control</td>
+  </tr>
+</table>
