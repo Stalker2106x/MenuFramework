@@ -23,6 +23,8 @@ public:
   */
   enum Type {
     Unknown = 0,
+    Text,
+    Separator,
     Button,
     Select,
     Script,

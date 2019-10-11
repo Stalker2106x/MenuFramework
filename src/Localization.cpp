@@ -3,11 +3,17 @@
 std::map<std::string, std::string> Localization::data;
 std::string Localization::langLocation = "./";
 
+/*
+ * @brief Removes all loaded translation from memory
+ */
 void Localization::clear()
 {
   data.clear();
 }
 
+/*
+ * @brief Search inside any string and subsitutes any <Lang> tag to its translation
+ */
 std::string Localization::substitute(std::string data)
 {
   size_t beg = 0;
@@ -28,6 +34,9 @@ std::string Localization::substitute(std::string data)
   return (str);
 }
 
+/*
+ * @brief Search inside any XML element and subsitutes any <Lang> tag to its translation
+ */
 std::string Localization::substitute(xml_node data)
 {
   std::string str;
@@ -55,6 +64,9 @@ std::string Localization::substitute(xml_node data)
   return (str);
 }
 
+/*
+ * @brief loads lang key=value pairs from json file
+ */
 void Localization::load(std::string langCode)
 {
   DataFile langFile(langLocation+langCode+".json");

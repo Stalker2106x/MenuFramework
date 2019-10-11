@@ -9,12 +9,12 @@
 class StyleUnit
 {
 public:
-    StyleUnit();
+    StyleUnit(const json &data);
 
     const std::string &operator[](const std::string &key);
 
     template <typename T>
-    const T &get(const std::string &key)
+    const T get(const std::string &key)
     {
         throw std::runtime_error("Not implemented");
     }
@@ -29,9 +29,11 @@ private:
 #define STYLE_LEFT          "left"
 #define STYLE_RIGHT         "right"
 #define STYLE_DOWN          "down"
-#define STYLE_CHAR          "char"
-#define STYLE_COUNT         "count"
+#define STYLE_COLOR         "color"
+#define STYLE_BGCOLOR       "bg" STYLE_COLOR
+#define STYLE_STRING        "string"
 #define STYLE_MARGIN        "margin"
+#define STYLE_SPACING       "spacing"
 #define STYLE_MARGIN_TOP    STYLE_MARGIN "-" STYLE_TOP
 #define STYLE_MARGIN_RIGHT  STYLE_MARGIN "-" STYLE_RIGHT
 #define STYLE_MARGIN_DOWN   STYLE_MARGIN "-" STYLE_DOWN
@@ -45,7 +47,7 @@ public:
     StyleSheet();
 
     void setDefaults(bool clear = true);
-    void load(const DataFile &source);
+    void load(const std::string &path);
     const StyleUnit &operator[](MenuItem::Type type);
 
 protected:

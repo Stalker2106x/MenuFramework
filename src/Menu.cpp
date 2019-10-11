@@ -12,9 +12,13 @@ std::mutex Menu::_mtx;
 std::shared_ptr<Menu> Menu::active = nullptr;
 std::shared_ptr<MenuFile> Menu::activeDoc = nullptr;
 std::unique_ptr<std::thread> Menu::_instance = nullptr;
+bool Menu::_quit = false;
+
+/*
+ * Default Manager/Renderer
+ */
 std::shared_ptr<GraphicsRenderer> Menu::_renderer = std::make_shared<NativeRenderer>();
 std::shared_ptr<InputManager> Menu::_inputmgr = std::make_shared<NativeInput>();
-bool Menu::_quit = false;
 
 Menu::Menu(const std::string &id)
  : _id(id), _lastInput(Key::Code::None), _clickCallback(nullptr)
@@ -36,11 +40,17 @@ Menu::Menu(const std::string &id)
 	if (menu.attribute("OnLoad")) _onLoadScript = menu.attribute("OnLoad").value();
 }
 
+/*
+ * @brief Defines which renderer instance the menu will use for drawing
+ */
 void Menu::setRenderer(std::shared_ptr<GraphicsRenderer> renderer)
 {
 	Menu::_renderer = renderer;
 }
 
+/*
+ * @brief Defines which input manager will handle menu interaction
+ */
 void Menu::setInputManager(std::shared_ptr<InputManager> inputmgr)
 {
 	Menu::_inputmgr = inputmgr;
@@ -51,6 +61,9 @@ void Menu::selectCursor()
 	(*active->_selection)->select(_inputmgr, _renderer);
 }
 
+/*
+ * @brief Exits the menu and its handler loops
+ */
 void Menu::quit()
 {
 	Menu::_quit = true;
@@ -58,6 +71,9 @@ void Menu::quit()
 	Menu::_instance = nullptr;
 }
 
+/*
+ * @brief Free menu from memory, but keeps insance alive (Menu can be reloaded and drawn)
+ */
 void Menu::unload()
 {
 	std::lock_guard<std::mutex> lock(_mtx);
@@ -68,11 +84,17 @@ void Menu::unload()
 	Menu::_inputmgr = nullptr;
 }
 
+/*
+ * @brief Method called upon instanciation before anything
+ */
 void Menu::onLoad()
 {
 	if (!_onLoadScript.empty()) ScriptEngine::runScript(_onLoadScript);
 }
 
+/*
+ * @brief Replace the menu by building a new one with the supplied XML
+ */
 void Menu::setActiveDocument(std::shared_ptr<MenuFile> doc)
 {
 	activeDoc = doc;
@@ -80,11 +102,17 @@ void Menu::setActiveDocument(std::shared_ptr<MenuFile> doc)
 	ScriptEngine::loadScripts(activeDoc->getData());
 }
 
+/*
+ * @brief Set a callback to be called everytime a click occurs inside menu
+ */
 void Menu::setClickCallback(std::function<void(std::shared_ptr<MenuItem>)> callback)
 {
 	_clickCallback = std::make_shared<std::function<void(std::shared_ptr<MenuItem>)>>(callback);
 }
 
+/*
+ * @brief Main menu update loop
+ */
 bool Menu::update()
 {
 	Key input = _inputmgr->getInput();
@@ -97,6 +125,9 @@ bool Menu::update()
 	return (true);
 }
 
+/*
+ * @brief Returns index of cursor as integer
+ */
 int Menu::getCursor()
 {
 	size_t cursor = 0;
@@ -115,6 +146,9 @@ void Menu::resetCursor()
 	if (_selection != _items.end()) (*_selection)->toggleHover();
 }
 
+/*
+ * @brief Handles cursor movement and hovering of elements
+ */
 void Menu::updateCursor(bool add)
 {
 	auto prevSel = _selection;
@@ -141,6 +175,9 @@ void Menu::renderAlerts()
 	for (size_t i = 0; i <_alerts.size(); i++) _alerts[i]->render(_renderer);
 }
 
+/*
+ * @brief Main render loop of menu
+ */
 void Menu::render()
 {
 	_renderer->clearScreen();
@@ -152,6 +189,9 @@ void Menu::render()
 	}
 }
 
+/*
+ * @brief Global logic loop
+ */
 void Menu::run()
 {
 	_instance = std::make_unique<std::thread>([=] () {
@@ -175,6 +215,9 @@ void Menu::run()
 	});
 }
 
+/*
+ * @brief Returns a pointer to the MenuItem the cursor is currently on
+ */
 std::shared_ptr<MenuItem> Menu::getHoveredItem()
 {
 	return (*_selection);
@@ -187,6 +230,9 @@ void Menu::renderConsole(std::string command)
   (*_renderer) << "> " << command;
 }
 
+/*
+ * @brief Inject and pops an alert in current menu
+ */
 void Menu::alert(std::string str)
 {
 	if (Menu::active != nullptr)
@@ -215,6 +261,9 @@ void Menu::clearAlerts()
 	_alerts.clear();
 }
 
+/*
+ * @brief Replace current menu by the one given
+ */
 void Menu::goTo(std::string id, std::string source, const DataSource dataMode)
 {
 	if (source != "") setActiveDocument(std::make_shared<MenuFile>(source, dataMode));
@@ -222,6 +271,9 @@ void Menu::goTo(std::string id, std::string source, const DataSource dataMode)
 	active->onLoad();
 }
 
+/*
+ * @brief Opens a menu above the current one
+ */
 void Menu::popUp(std::string id, std::string source, const DataSource dataMode)
 {
 	std::shared_ptr<MenuFile> prevDoc = activeDoc;
@@ -241,6 +293,9 @@ void Menu::popUp(std::string id, std::string source, const DataSource dataMode)
 	goTo(prevId);
 }
 
+/*
+ * @brief Returns a pointer to the MenuItem with given Id
+ */
 std::shared_ptr<MenuItem> Menu::getItem(const std::string &id)
 {
 	auto obj = std::find_if(_items.begin(), _items.end(),
@@ -249,6 +304,9 @@ std::shared_ptr<MenuItem> Menu::getItem(const std::string &id)
 	return *(obj);
 }
 
+/*
+ * @brief Insert item in menu at given index
+ */
 void Menu::addItem(const xml_node &el, int idx)
 {
 	try {

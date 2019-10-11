@@ -1,2 +1,10 @@
 {
+    "Text": {
+        "margin-left": 10
+    },
+    "Separator": {
+        "string": "-=-=-",
+        "margin-top": 1,
+        "margin-down": 1
+    }
 }
