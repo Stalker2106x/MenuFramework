@@ -1,12 +1,13 @@
 # Compiled source #
 ###################
 /lib
+/bin
 *.com
 *.class
 *.dll
 *.res
 *.exe
-Racedriver
+MenuFramework_*
 *.lib
 *.so
 *.o
