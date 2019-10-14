@@ -8,8 +8,10 @@
  */
 class StyleUnit
 {
+    typedef std::map<std::string, std::string> styleMap_t;
 public:
     StyleUnit(const json &data);
+    StyleUnit(std::initializer_list<std::pair<const std::string, std::string>> data);
 
     const std::string &operator[](const std::string &key);
 
@@ -19,7 +21,7 @@ public:
         throw std::runtime_error("Not implemented");
     }
 private:
-    std::map<std::string, std::string> _style;
+    styleMap_t _style;
 };
 
 /*
@@ -31,7 +33,6 @@ private:
 #define STYLE_DOWN          "down"
 #define STYLE_COLOR         "color"
 #define STYLE_BGCOLOR       "bg" STYLE_COLOR
-#define STYLE_STRING        "string"
 #define STYLE_MARGIN        "margin"
 #define STYLE_SPACING       "spacing"
 #define STYLE_MARGIN_TOP    STYLE_MARGIN "-" STYLE_TOP
@@ -51,7 +52,8 @@ public:
     const StyleUnit &operator[](MenuItem::Type type);
 
 protected:
-    std::map<size_t, StyleUnit> _assocs;
+    typedef std::map<MenuItem::Type, StyleUnit> assocMap_t;
+    assocMap_t _assocs;
 };
 
 #endif /* !STYLESHEET_HH_ */

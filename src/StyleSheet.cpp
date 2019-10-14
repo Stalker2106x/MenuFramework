@@ -8,6 +8,11 @@ StyleUnit::StyleUnit(const json &data)
   }
 }
 
+StyleUnit::StyleUnit(std::initializer_list<std::pair<const std::string, std::string>> data)
+{
+    _style.insert(data);
+}
+
 const std::string &StyleUnit::operator[](const std::string &key)
 {
     return (_style[key]);
@@ -33,7 +38,33 @@ StyleSheet::StyleSheet()
 void StyleSheet::setDefaults(bool clear)
 {
     if (clear) _assocs.clear();
-    //implement defaults
+    _assocs.insert({
+    {MenuItem::Type::Text,
+        {
+            {"",""}
+        }
+    },
+    {MenuItem::Type::Separator,
+        {
+            {"skin","-=-"}
+        }
+    },
+    {MenuItem::Type::Button,
+        {
+        }
+    },
+    {MenuItem::Type::Alert,
+        {
+            {"skin","::"}
+        }
+    },
+    {MenuItem::Type::Select,
+        {
+            {"left-select","<"},
+            {"right-select",">"}
+        }
+    }
+    });
 }
 
 void StyleSheet::load(const std::string &path)
