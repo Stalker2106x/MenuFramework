@@ -194,6 +194,7 @@ void Menu::render()
  */
 void Menu::run()
 {
+	StyleSheet::active = std::make_shared<StyleSheet>();
 	_instance = std::make_unique<std::thread>([=] () {
 		while (!_quit)
 		{

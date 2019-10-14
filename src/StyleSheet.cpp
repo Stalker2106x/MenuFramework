@@ -1,5 +1,9 @@
 #include "StyleSheet.hh"
 
+std::shared_ptr<StyleSheet> StyleSheet::active = nullptr;
+
+// StyleUnit
+
 StyleUnit::StyleUnit(const json &data)
 {
   for (auto &unit : data.get<json::object_t>())
@@ -30,6 +34,8 @@ const float StyleUnit::get<float>(const std::string &key)
     return (std::stof(_style[key]));
 }
 
+// StyleSheet
+
 StyleSheet::StyleSheet()
 {
     setDefaults();
@@ -39,27 +45,13 @@ void StyleSheet::setDefaults(bool clear)
 {
     if (clear) _assocs.clear();
     _assocs.insert({
-    {MenuItem::Type::Text,
-        {
-            {"",""}
-        }
-    },
-    {MenuItem::Type::Separator,
-        {
-            {"skin","-=-"}
-        }
-    },
-    {MenuItem::Type::Button,
+    {"text",
         {
         }
     },
-    {MenuItem::Type::Alert,
+    {"select",
         {
-            {"skin","::"}
-        }
-    },
-    {MenuItem::Type::Select,
-        {
+            {"spacing","10"},
             {"left-select","<"},
             {"right-select",">"}
         }
@@ -78,10 +70,9 @@ void StyleSheet::load(const std::string &path)
   {
     //_assocs.emplace(/* item typename to enum */, StyleUnit(item.second));
   }
-
 }
 
-const StyleUnit &StyleSheet::operator[](MenuItem::Type type)
+const StyleUnit &StyleSheet::get(const std::string &group)
 {
-    return (_assocs.at(type));
+    return (_assocs.at(group));
 }

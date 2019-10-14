@@ -49,10 +49,17 @@ public:
 
     void setDefaults(bool clear = true);
     void load(const std::string &path);
-    const StyleUnit &operator[](MenuItem::Type type);
+    const StyleUnit &get(const std::string &group);
+    
+    template <typename T>
+    const T get(const std::string &group, const std::string &key)
+    {
+        return (_assocs.at(group).get<T>(key));
+    }
 
+    static std::shared_ptr<StyleSheet> active;
 protected:
-    typedef std::map<MenuItem::Type, StyleUnit> assocMap_t;
+    typedef std::map<std::string, StyleUnit> assocMap_t;
     assocMap_t _assocs;
 };
 

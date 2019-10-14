@@ -206,7 +206,7 @@ void MenuSelect::setData(const std::string data)
 void MenuSelect::render(std::shared_ptr<GraphicsRenderer> renderer)
 {
   MenuItem::render(renderer);
-  (*renderer) << "    <" + _values[_cursor].first + ">";
+  (*renderer) << std::string(StyleSheet::active->get<int>("select", "spacing"), ' ') << "<" + _values[_cursor].first + ">";
 }
 
 
