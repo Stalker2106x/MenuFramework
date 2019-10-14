@@ -79,7 +79,7 @@ void MenuItem::render(std::shared_ptr<GraphicsRenderer> renderer)
   if (_hover)
   {
     (*renderer) << setColor(GraphicsRenderer::Color::Red)
-                << ">";
+                << StyleSheet::active->get<std::string>("cursor", "char");
   }
   (*renderer) << _label;
   if (_hover) (*renderer) << resetAttrs;
