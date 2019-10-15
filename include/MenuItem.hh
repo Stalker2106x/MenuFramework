@@ -9,8 +9,6 @@
 #include "InputManager.hpp"
 #include "DataFile.hh"
 
-#define TARGET_SEPARATOR  ":"
-
 /*!
  * @brief Holds menu entry data
  */
@@ -87,6 +85,7 @@ public:
   virtual void render(std::shared_ptr<GraphicsRenderer> renderer);
 
 private:
+  int _spacing;
   std::string _data;
   Point _dataPos;
 };
@@ -105,6 +104,8 @@ public:
   virtual void render(std::shared_ptr<GraphicsRenderer> renderer);
 
 private:
+  int _spacing;
+  std::pair<std::string, std::string> _bracing;
   std::vector<std::pair<std::string, std::string>> _values;
   int _cursor;
 };
@@ -129,6 +130,9 @@ public:
   MenuAlert(const xml_node &data);
 
   virtual void render(std::shared_ptr<GraphicsRenderer> renderer);
+
+private:
+  std::pair<std::string, std::string> _bracing;
 };
 
 

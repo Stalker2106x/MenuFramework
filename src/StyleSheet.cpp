@@ -59,18 +59,34 @@ void StyleSheet::setDefaults(bool clear)
     _assocs.insert({
     {"cursor",
         {
-            {"char","&"}
+            {"char",">"}
+        }
+    },
+    {"separator",
+        {
+            {"string","======="}
         }
     },
     {"text",
         {
         }
     },
+    {"input",
+        {
+            {"spacing","2"}
+        }
+    },
     {"select",
         {
-            {"spacing","10"},
-            {"left-select","<"},
-            {"right-select",">"}
+            {"spacing","2"},
+            {"bracing-left","<"},
+            {"bracing-right",">"}
+        }
+    },
+    {"alert",
+        {
+            {"bracing-left",":::::\n"},
+            {"bracing-right","\n:::::\n"}
         }
     }
     });

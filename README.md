@@ -62,6 +62,7 @@ A basic example of a program that shows a menu is the following:
                     " <Button Type='Intern' Target='alert(\"Stop pressing me!\")'>Press me!</Button>"
                     " <Button Type='Intern' Target=''>Do nothing</Button>"
                     "</Menu>";
+    Menu::init(); //Load library
     Menu::goTo("", menuDocument, DataSource::Document);
     Menu::run();
 
@@ -348,5 +349,13 @@ The following table shows the existing rules for styling:
     <td>spacing</td>
     <td>2</td>
     <td>set the spacing (in space chars) between the label and the control</td>
+  </tr>
+  <tr>
+    <td>
+    bracing-left
+    bracing-right
+    </td>
+    <td>"<<"</td>
+    <td>set the string to print at left of value bracing or element bracing</td>
   </tr>
 </table>

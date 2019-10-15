@@ -3,8 +3,8 @@
 
 #include "MenuItem.hh"
 
-/*
- * Styling properties are defined as string key=value format, stored in map.
+/**
+ * @brief Styling properties are defined as string key=value format, stored in map.
  */
 class StyleUnit
 {
@@ -18,14 +18,14 @@ public:
     template <typename T>
     const T get(const std::string &key)
     {
-        throw std::runtime_error("Not implemented");
+        throw std::runtime_error("Type not implemented");
     }
 private:
     styleMap_t _style;
 };
 
-/*
- * Common styling key strings
+/**
+ * @brief Common styling key strings
  */
 #define STYLE_TOP           "top"
 #define STYLE_LEFT          "left"
@@ -40,8 +40,8 @@ private:
 #define STYLE_MARGIN_DOWN   STYLE_MARGIN "-" STYLE_DOWN
 #define STYLE_MARGIN_LEFT   STYLE_MARGIN "-" STYLE_LEFT
 
-/*
- * This class holds style for every non alphanumeric char that is rendered
+/**
+ * @brief This class holds style for every non alphanumeric char that is rendered
  */
 class StyleSheet {
 public:

@@ -28,6 +28,7 @@ int main(int argc, char **argv)
 														 "	 setSelectValue(\"SelectTest\", \"2\")"
 														 "   addMenuItem(0, \"<Text>This is the new title</Text>\")"
 														 "]]></Script>";
+  Menu::init();
   Menu::goTo("", menuDocument, DataSource::Document);
 	//Menu::active->setClickCallback([](std::shared_ptr<MenuItem> it) { });
   Menu::run();

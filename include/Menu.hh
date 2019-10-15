@@ -23,6 +23,7 @@ class MF_API Menu
 {
 public:
   //Generic
+  static void init();
   static void setRenderer(std::shared_ptr<GraphicsRenderer> renderer);
   static void setInputManager(std::shared_ptr<InputManager> inputmgr);
   static void unload();

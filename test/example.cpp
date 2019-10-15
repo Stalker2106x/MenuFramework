@@ -14,6 +14,7 @@ int main(int argc, char **argv)
   													 " </Select>"
   													 " <Input Id='InputTest'/>"
 														 "</Menu>";
+  Menu::init();
   Menu::goTo("", menuDocument, DataSource::Document);
   Menu::run();
 	while (1);

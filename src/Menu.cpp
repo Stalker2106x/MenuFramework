@@ -61,7 +61,7 @@ void Menu::selectCursor()
 	(*active->_selection)->select(_inputmgr, _renderer);
 }
 
-/*
+/**
  * @brief Exits the menu and its handler loops
  */
 void Menu::quit()
@@ -71,8 +71,16 @@ void Menu::quit()
 	Menu::_instance = nullptr;
 }
 
-/*
- * @brief Free menu from memory, but keeps insance alive (Menu can be reloaded and drawn)
+/**
+ * @brief Initialize library
+ */
+void Menu::init()
+{
+	StyleSheet::active = std::make_shared<StyleSheet>();
+}
+
+/**
+ * @brief Free library from memory
  */
 void Menu::unload()
 {
@@ -82,9 +90,10 @@ void Menu::unload()
 	Menu::activeDoc = nullptr;
 	Menu::_renderer = nullptr;
 	Menu::_inputmgr = nullptr;
+	StyleSheet::active = nullptr;
 }
 
-/*
+/**
  * @brief Method called upon instanciation before anything
  */
 void Menu::onLoad()
@@ -92,7 +101,7 @@ void Menu::onLoad()
 	if (!_onLoadScript.empty()) ScriptEngine::runScript(_onLoadScript);
 }
 
-/*
+/**
  * @brief Replace the menu by building a new one with the supplied XML
  */
 void Menu::setActiveDocument(std::shared_ptr<MenuFile> doc)
@@ -102,7 +111,7 @@ void Menu::setActiveDocument(std::shared_ptr<MenuFile> doc)
 	ScriptEngine::loadScripts(activeDoc->getData());
 }
 
-/*
+/**
  * @brief Set a callback to be called everytime a click occurs inside menu
  */
 void Menu::setClickCallback(std::function<void(std::shared_ptr<MenuItem>)> callback)
@@ -110,7 +119,7 @@ void Menu::setClickCallback(std::function<void(std::shared_ptr<MenuItem>)> callb
 	_clickCallback = std::make_shared<std::function<void(std::shared_ptr<MenuItem>)>>(callback);
 }
 
-/*
+/**
  * @brief Main menu update loop
  */
 bool Menu::update()
@@ -125,7 +134,7 @@ bool Menu::update()
 	return (true);
 }
 
-/*
+/**
  * @brief Returns index of cursor as integer
  */
 int Menu::getCursor()
@@ -146,7 +155,7 @@ void Menu::resetCursor()
 	if (_selection != _items.end()) (*_selection)->toggleHover();
 }
 
-/*
+/**
  * @brief Handles cursor movement and hovering of elements
  */
 void Menu::updateCursor(bool add)
@@ -175,7 +184,7 @@ void Menu::renderAlerts()
 	for (size_t i = 0; i <_alerts.size(); i++) _alerts[i]->render(_renderer);
 }
 
-/*
+/**
  * @brief Main render loop of menu
  */
 void Menu::render()
@@ -189,12 +198,11 @@ void Menu::render()
 	}
 }
 
-/*
+/**
  * @brief Global logic loop
  */
 void Menu::run()
 {
-	StyleSheet::active = std::make_shared<StyleSheet>();
 	_instance = std::make_unique<std::thread>([=] () {
 		while (!_quit)
 		{
