@@ -1,10 +1,20 @@
 {
-    "Text": {
-        "margin-left": 10
+    "cursor": {
+        "char":">"
     },
-    "Separator": {
-        "string": "-=-=-",
-        "margin-top": 1,
-        "margin-down": 1
+    "separator": {
+        "string": "======="
+    },
+    "input": {
+        "spacing": "2"
+    },
+    "select": {
+        "spacing": "2",
+        "bracing-left": "<",
+        "bracing-right": ">"
+    },
+    "alert": {
+        "bracing-left": ":::::\n",
+        "bracing-right": "\n:::::\n"
     }
 }

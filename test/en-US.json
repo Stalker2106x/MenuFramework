@@ -1,6 +1,7 @@
 {
   "localization": "English",
   "data": {
-    "any.key": "Translated value"
+    "any.key": "Translated value",
+    "ThisOneDoes": "Translated value"
   }
 }

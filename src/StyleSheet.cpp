@@ -101,7 +101,7 @@ void StyleSheet::load(const std::string &path)
   style = styleFile.getData();
   for (auto &item : style.get<json::object_t>())
   {
-    //_assocs.emplace(/* item typename to enum */, StyleUnit(item.second));
+    _assocs.emplace(item.first, StyleUnit(item.second));
   }
 }
 

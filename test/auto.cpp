@@ -10,13 +10,16 @@ int main(int argc, char **argv)
 	Menu::setInputManager(std::make_shared<NativeInput>());
 	std::string menuDocument = "<Menu OnLoad='InitScript'>"
 														 " <Text>Menu Example</Text>"
+														 " <Text>Look: <Lang Id='ThisLangDoesNotExist'/></Text>"
+														 " <Text>Look: <Lang Id='ThisOneDoes'/></Text>"
 														 " <Sep/>"
 														 " <Button Type='Intern' Target=''>ButtonTest</Button>"
-  													 " <Select Id='SelectTest'>"
-  													 "  <Option Value='1'>Option1</Option>"
-  													 "  <Option Value='2'>Option2</Option>"
-  													 " </Select>"
-  													 " <Input Id='InputTest'/>"
+														 "<Script></Script>"
+														" <Select Id='SelectTest'>"
+														"  <Option Value='1'>Option1</Option>"
+														"  <Option Value='2'>Option2</Option>"
+														" </Select>"
+														" <Input Id='InputTest'/>"
 														 "</Menu>"
 														 "<Script Id='InitScript'><![CDATA["
 														 "	 alert(\"Hello, i am an alert\")"
@@ -29,6 +32,7 @@ int main(int argc, char **argv)
 														 "   addMenuItem(0, \"<Text>This is the new title</Text>\")"
 														 "]]></Script>";
   Menu::init();
+  StyleSheet::active->load("../test/style.json");
   Menu::goTo("", menuDocument, DataSource::Document);
 	//Menu::active->setClickCallback([](std::shared_ptr<MenuItem> it) { });
   Menu::run();
