@@ -2,6 +2,7 @@
 #include "ScriptEngine.hh"
 #include "Menu.hh"
 #include "Localization.hh"
+#include "StyleSheet.hh"
 
 //MenuItem
 
@@ -48,7 +49,7 @@ std::shared_ptr<MenuItem> MenuItem::create(const xml_node &data)
     }
     else throw(std::runtime_error("Error in XML"));
   } catch (std::exception &e) {
-    throw (std::runtime_error("Invalid element XML"));
+    throw (std::runtime_error("Error while instantiating element :"+std::string(e.what())));
   }
   return (el);
 }

@@ -15,14 +15,42 @@ public:
 
     const std::string &operator[](const std::string &key);
 
+    //Global template
     template <typename T>
     const T get(const std::string &key)
     {
-        throw std::runtime_error("Type not implemented");
+        throw std::runtime_error("StyleUnit::get error: Type " + std::string(typeid(T).name()) + " not implemented");
     }
+    //Specializations
+    
 private:
     styleMap_t _style;
 };
+
+//Specializations for get
+template <>
+inline const std::string StyleUnit::get<std::string>(const std::string &key)
+{
+    return (_style[key]);
+}
+
+template <>
+inline const char StyleUnit::get<char>(const std::string &key)
+{
+    return (_style[key][0]);
+}
+
+template <>
+inline const int StyleUnit::get<int>(const std::string &key)
+{
+    return (std::stoi(_style[key]));
+}
+
+template <>
+inline const float StyleUnit::get<float>(const std::string &key)
+{
+    return (std::stof(_style[key]));
+}
 
 /**
  * @brief Common styling key strings

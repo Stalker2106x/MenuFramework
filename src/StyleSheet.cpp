@@ -22,30 +22,6 @@ const std::string &StyleUnit::operator[](const std::string &key)
     return (_style[key]);
 }
 
-template <>
-const std::string StyleUnit::get<std::string>(const std::string &key)
-{
-    return (_style[key]);
-}
-
-template <>
-const char StyleUnit::get<char>(const std::string &key)
-{
-    return (_style[key][0]);
-}
-
-template <>
-const int StyleUnit::get<int>(const std::string &key)
-{
-    return (std::stoi(_style[key]));
-}
-
-template <>
-const float StyleUnit::get<float>(const std::string &key)
-{
-    return (std::stof(_style[key]));
-}
-
 // StyleSheet
 
 StyleSheet::StyleSheet()

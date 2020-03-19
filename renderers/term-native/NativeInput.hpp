@@ -38,7 +38,9 @@ public:
 
   ~NativeInput()
   {
+#if (defined(__GNUC__) && !defined(__MINGW32__)) || defined(__clang__)
     tcsetattr(0, TCSANOW, &termCfg);
+#endif
   }
 
   Key getInput()
@@ -164,7 +166,9 @@ public:
     return (Key::Code::None);
   }
 private:
+#if (defined(__GNUC__) && !defined(__MINGW32__)) || defined(__clang__)
     struct termios termCfg;
+#endif
 };
 
 #endif /* !NATIVEINPUT_HPP_ */

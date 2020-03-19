@@ -2,6 +2,7 @@
 #include "Menu.hh"
 #include "ScriptEngine.hh"
 #include "Point.hpp"
+#include "StyleSheet.hh"
 //Native _renderer
 #include "term-native/NativeInput.hpp"
 #include "term-native/NativeRenderer.hpp"

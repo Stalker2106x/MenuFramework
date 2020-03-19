@@ -14,7 +14,6 @@
 #include "InputManager.hpp"
 #include "DataFile.hh"
 #include "MenuItem.hh"
-#include "StyleSheet.hh"
 
 /*!
  * @brief Base/Generic class for Menu

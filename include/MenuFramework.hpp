@@ -9,5 +9,6 @@
 #include "MenuItem.hh"
 #include "Point.hpp"
 #include "ScriptEngine.hh"
+#include "StyleSheet.hh"
 
 #endif /* !MENUFRAMEWORK_HPP_ */
